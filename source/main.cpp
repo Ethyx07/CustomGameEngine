@@ -67,10 +67,11 @@ int main()
         out vec4 FragColor;
 
         in vec3 vColor;
+        uniform vec4 uColor;
 
         void main()
         {
-            FragColor = vec4(vColor, 1.0f);
+            FragColor = vec4(vColor, 1.0f) * uColor;
         }
     )";
 
@@ -148,12 +149,15 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
+    GLint uColorLoc = glGetUniformLocation(shaderProgram, "uColor");
+
     while (!glfwWindowShouldClose(window))  //Loops until window is prompted to close
     {
         glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(shaderProgram);
+        glUniform4f(uColorLoc, 0.0f, 1.0f, 0.0f, 1.0f);
         glBindVertexArray(vao);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
