@@ -36,9 +36,13 @@ int main()
     string vertexShaderSource = R"(
         #version 330 core
         layout (location = 0) in vec3 position;
+        layout (location = 1) in vec3 color;
+
+        out vec3 vColor;
         
         void main()
         {
+            vColor = color;
             gl_Position = vec4(position.x, position.y, position.z, 1.0);
         }
     )";
@@ -62,9 +66,11 @@ int main()
         #version 330 core
         out vec4 FragColor;
 
+        in vec3 vColor;
+
         void main()
         {
-            FragColor = vec4(1.0f ,0.0f, 0.0f, 1.0f);
+            FragColor = vec4(vColor, 1.0f);
         }
     )";
 
@@ -100,15 +106,57 @@ int main()
 
     vector<float> vertices = 
     {
-        0.0f, 0.5f, 0.0f,
-        -0.5f, -0.5f, 0.0f, 
-        0.5f, -0.5f, 0.0f
+        0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
+        -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
+        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,
+        0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f
     };
+    
+    vector<unsigned int> indices = 
+    {
+        0,1,2,
+        0,2,3
+    };
+
+    //Creates VBO binds it, passes data and unbinds
+    GLuint vbo;
+    glGenBuffers(1, &vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo); //ARRAY_BUFFER tells that it will store an array of data
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0); //Unbinds buffer but vertex data is already stored
+
+    //Creates ebo and buffers the data of indices before unbinding
+    GLuint ebo;
+    glGenBuffers(1, &ebo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+    //Creates vao, binds it and passes data then unbinds
+    GLuint vao;
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, false, 6 * sizeof(float), (void*)0); //Location, number of components ,data type, stride value, offset
+    glEnableVertexAttribArray(0);
+
+    glVertexAttribPointer(1, 3, GL_FLOAT, false, 6 * sizeof(float), (void*)(3 * sizeof(float))); //Stride value is 6 as there are 6 values per vertex (3 pos, 3 colour)
+    glEnableVertexAttribArray(1);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 
     while (!glfwWindowShouldClose(window))  //Loops until window is prompted to close
     {
-        glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+        glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+
+        glUseProgram(shaderProgram);
+        glBindVertexArray(vao);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
         glfwSwapBuffers(window); //Swaps buffers between back and front buffer
         glfwPollEvents();
     }
