@@ -1,4 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 project(Engine)
 
@@ -9,6 +11,7 @@ set(PROJECT_SOURCE_FILES
 	source/Application.cpp
 	source/input/InputManager.h
 	source/input/InputManager.cpp
+	
 )
 
 include_directories(source)

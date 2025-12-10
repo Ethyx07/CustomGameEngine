@@ -10,7 +10,7 @@ namespace eng
 	void keyCallback(GLFWwindow* window, int key, int, int action, int)
 	{
 		auto& inputManager = eng::Engine::GetInstance().GetInputManager();
-		if (action == GLFW_PRESS)
+		if (action == GLFW_PRESS) //Checks if key is pressed. Game can then use this in return
 		{
 			inputManager.SetKeyPressed(key, true);
 		}
@@ -110,5 +110,10 @@ namespace eng
 	{
 		return inputManager;
 	}
+
+	/*GraphicsAPI& Engine::GetGraphicsAPI()
+	{
+		return graphicsAPI;
+	}*/
 
 }
