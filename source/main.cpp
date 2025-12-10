@@ -4,7 +4,7 @@
 int main() 
 {
 	Game* game = new Game(); //Game application used in the engine
-	eng::Engine engine;
+	eng::Engine& engine = eng::Engine::GetInstance();
 
 	engine.SetApplication(game); //Sets game as engine's application
 
