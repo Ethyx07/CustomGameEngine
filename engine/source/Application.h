@@ -1,7 +1,7 @@
 #pragma once
 
 
-namespace engine 
+namespace eng
 {
 	class Application
 	{

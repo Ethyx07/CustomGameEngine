@@ -1,14 +1,44 @@
 #include "Engine.h"
 #include "Application.h"
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <iostream>
 
-namespace engine
+
+namespace eng
 {
-	bool Engine::Init()
+	bool Engine::Init(int width, int height)
 	{
 		if(!application) //Ensures application is valid before attempting to initialise
 		{
 			return false;
 		}
+
+		if (!glfwInit()) //Makes sure glfw initialised properly
+		{
+			return false;
+		}
+
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); //tells glfw what version of opengl is being used and sets its profile
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+		window = glfwCreateWindow(width, height, "GameDevelopmentProject", nullptr, nullptr); //Creates window terminal
+		if (window == nullptr)
+		{
+			std::cout << "ERROR CREATING WINDOW" << std::endl;
+			glfwTerminate(); //Terminates if window is not created
+			return false;
+		}
+
+		glfwMakeContextCurrent(window); //Sets window as glfw current context
+
+		if (glewInit() != GLEW_OK)  //Checks if glew was initialised properly
+		{
+			glfwTerminate();
+			return false;
+		}
+
 		return application->Init();
 	}
 
@@ -20,13 +50,17 @@ namespace engine
 		}
 
 		lastTimePoint = std::chrono::high_resolution_clock::now(); //Gets last time point prior to application beginning
-		while(!application->GetNeedsToBeClosed())
+		while(!glfwWindowShouldClose(window) && !application->GetNeedsToBeClosed())
 		{
+			glfwPollEvents();
+
 			auto now = std::chrono::high_resolution_clock::now(); //Gets current time point
 			float deltaTime = std::chrono::duration<float>(now - lastTimePoint).count(); //Finds difference between current and past to get our delta time
 			lastTimePoint = now; //Updates last time point to be the current one
 
-			application->Update(deltaTime); //Calls update function for application
+			application->Update(deltaTime); //Calls update function for the application
+
+			glfwSwapBuffers(window);
 		}
 	}
 
@@ -37,6 +71,8 @@ namespace engine
 			application->Destroy();
 			application.reset();
 		}
+		glfwTerminate();
+		window = nullptr;
 	}
 
 	void Engine::SetApplication(Application* app)

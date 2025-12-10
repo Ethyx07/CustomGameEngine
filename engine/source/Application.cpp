@@ -1,7 +1,7 @@
 #include "Application.h"
 
 
-namespace engine
+namespace eng
 {
 	void Application::SetNeedsToClose(bool value)
 	{
