@@ -111,9 +111,9 @@ namespace eng
 		return inputManager;
 	}
 
-	/*GraphicsAPI& Engine::GetGraphicsAPI()
+	GraphicsAPI& Engine::GetGraphicsAPI()
 	{
 		return graphicsAPI;
-	}*/
+	}
 
 }

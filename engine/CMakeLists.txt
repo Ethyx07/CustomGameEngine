@@ -1,32 +1,38 @@
 cmake_minimum_required(VERSION 3.10)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 project(Engine)
 
-# Engine source files
 set(PROJECT_SOURCE_FILES
-    source/Engine.h
-    source/Engine.cpp
-    source/Application.h
-    source/Application.cpp
-    source/input/InputManager.h
-    source/input/InputManager.cpp
-    source/graphics/ShaderProgram.h
+	source/Engine.h
+	source/Engine.cpp
+	source/Application.h
+	source/Application.cpp
+	source/input/InputManager.h
+	source/input/InputManager.cpp
+	source/graphics/ShaderProgram.h
+	source/graphics/ShaderProgram.cpp
+	source/graphics/GraphicsAPI.h
+	source/graphics/GraphicsAPI.cpp
 )
 
-# Create the Engine library first
+include_directories(source)
 add_library(${PROJECT_NAME} ${PROJECT_SOURCE_FILES})
 
-# Include engine source folder
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/source)
-
-# Add GLFW
+# Add GLFW library
 add_subdirectory(thirdparty/glfw-3.4 "${CMAKE_CURRENT_BINARY_DIR}/glfw_build")
-target_link_libraries(${PROJECT_NAME} PUBLIC glfw)
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/glfw-3.4/include)
+include_directories(thirdparty/glfw-3.4/include)
 
-# Add GLEW
+# Add Glew library
 set(BUILD_UTILS OFF CACHE BOOL "utilities" FORCE)
 add_subdirectory(thirdparty/glew/build/cmake "${CMAKE_CURRENT_BINARY_DIR}/glew_build")
-target_link_libraries(${PROJECT_NAME} PUBLIC glew_s)
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/glew/include)
-target_compile_definitions(${PROJECT_NAME} PUBLIC GLEW_STATIC)
+include_directories(thirdparty/glew/include)
+set_property(TARGET glew_s PROPERTY FOLDER GLEW)
+set_property(TARGET glew PROPERTY FOLDER GLEW)
+
+# Link all thirdparty libraries
+target_link_libraries(${PROJECT_NAME} 
+    glfw 
+    glew_s
+)

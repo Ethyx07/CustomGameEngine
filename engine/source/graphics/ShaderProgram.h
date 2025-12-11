@@ -19,7 +19,7 @@ namespace eng
 		void SetUniform(std::string& name, float value);
 
 	private:
-		std::unordered_map<std::string&, GLint> uniformLocationCache;
+		std::unordered_map<std::string, GLint> uniformLocationCache;
 		GLuint shaderProgramID = 0;
 	};
 }
