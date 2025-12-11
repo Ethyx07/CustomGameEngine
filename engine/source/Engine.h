@@ -1,5 +1,6 @@
 #pragma once
 #include "input/InputManager.h"
+//#include "graphics/GraphicsAPI.h"
 #include <memory>
 #include <chrono>
 
@@ -28,12 +29,14 @@ namespace eng
 		void SetApplication(Application* app);
 		Application* GetApplication();
 		InputManager& GetInputManager();
+		//GraphicsAPI& GetGraphicsAPI();
 
 	private:
 		std::unique_ptr<Application> application; 
 		std::chrono::steady_clock::time_point lastTimePoint;
 		GLFWwindow* window = nullptr;
 		InputManager inputManager;
+		//GraphicsAPI graphicsAPI;
 	};
 }
 
