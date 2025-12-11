@@ -1,4 +1,4 @@
-#include <graphics/ShaderProgram.h>
+#include "graphics/ShaderProgram.h"
 
 namespace eng
 {
@@ -29,7 +29,7 @@ namespace eng
 		return location;
 	}
 
-	void ShaderProgram::SetUniform(std::string& name, float value)
+	void ShaderProgram::SetUniform(const std::string& name, float value) //One version of the setuniform function for when uniform is 1 float
 	{
 		auto location = GetUniformLocation(name);
 		glUniform1f(location, value);
