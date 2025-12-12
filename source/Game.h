@@ -1,5 +1,6 @@
 #pragma once
 #include <eng.h>
+#include <memory>
 
 class Game : public eng::Application
 {
@@ -10,4 +11,6 @@ public:
 
 private:
 	eng::Material material;
+
+	std::unique_ptr<eng::Mesh> mesh;
 };

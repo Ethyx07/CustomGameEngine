@@ -34,9 +34,43 @@ bool Game::Init()
         }
     )";
     
-    auto& graphicsAPI = eng::Engine::GetInstance().GetGraphicsAPI();
-    auto shaderProgram = graphicsAPI.CreateShaderProgram(vertexShaderSource, fragmentShaderSource);
+    auto& graphicsAPI = eng::Engine::GetInstance().GetGraphicsAPI(); //Gets our graphics API from our engine instance
+    auto shaderProgram = graphicsAPI.CreateShaderProgram(vertexShaderSource, fragmentShaderSource); //Creates a shader program using the graphicsAPI
     material.SetShaderProgram(shaderProgram);
+
+    std::vector<float> vertices =
+    {
+        0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
+        -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
+        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,
+        0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f
+    }; //Creates vertices to be used for vertex buffer
+
+    std::vector<unsigned int> indices =
+    {
+        0,1,2,
+        0,2,3
+    }; //Creates indices to be used for index buffer
+
+    eng::VertexLayout vertexLayout;
+    //Position IN from vertex shader
+    vertexLayout.elements.push_back({
+        0,
+        3,
+        GL_FLOAT,
+        0
+        });
+
+    //Colour IN from vertex shader
+    vertexLayout.elements.push_back({
+        1,
+        3,
+        GL_FLOAT,
+        sizeof(float) * 3
+        });
+    vertexLayout.stride = sizeof(float) * 6;
+
+    mesh = std::make_unique<eng::Mesh>(vertexLayout, vertices, indices); //Creates unique mesh that has the vertices and indices above as well as the vertex layout
 
 	return true;
 }
