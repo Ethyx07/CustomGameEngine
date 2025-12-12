@@ -26,11 +26,11 @@ bool Game::Init()
         out vec4 FragColor;
 
         in vec3 vColor;
-        uniform vec4 uColor;
+     
 
         void main()
         {
-            FragColor = vec4(vColor, 1.0f) * uColor;
+            FragColor = vec4(vColor, 1.0f);
         }
     )";
     
@@ -82,6 +82,13 @@ void Game::Update(float deltaTime)
 	{
 		std::cout << "[A] button is pressed" << std::endl;
 	}
+
+    eng::RenderCommand command;
+    command.material = &material;
+    command.mesh = mesh.get();
+
+    auto& renderQueue = eng::Engine::GetInstance().GetRenderQueue();
+    renderQueue.Submit(command);
 }
 
 void Game::Destroy()

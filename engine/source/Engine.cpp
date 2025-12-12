@@ -81,6 +81,11 @@ namespace eng
 
 			application->Update(deltaTime); //Calls update function for the application
 
+			graphicsAPI.SetClearColour(1.0f, 1.0f, 1.0f, 1.0f);
+			graphicsAPI.ClearBuffers();
+
+			renderQueue.Draw(graphicsAPI);
+
 			glfwSwapBuffers(window);
 		}
 	}
@@ -114,6 +119,11 @@ namespace eng
 	GraphicsAPI& Engine::GetGraphicsAPI()
 	{
 		return graphicsAPI;
+	}
+
+	RenderQueue& Engine::GetRenderQueue()
+	{
+		return renderQueue;
 	}
 
 }

@@ -81,6 +81,16 @@ namespace eng
         return EBO;
     }
 
+    void GraphicsAPI::SetClearColour(float r, float g, float b, float a)
+    {
+        glClearColor(r, g, b, a);
+    }
+
+    void GraphicsAPI::ClearBuffers()
+    {
+        glClear(GL_COLOR_BUFFER_BIT);
+    }
+
     void GraphicsAPI::BindShaderProgram(ShaderProgram* shaderProgram)
     {
         if (shaderProgram) //Binds our shader program if it is valid

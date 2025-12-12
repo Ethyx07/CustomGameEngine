@@ -20,6 +20,9 @@ namespace eng
 		void BindShaderProgram(ShaderProgram* shaderProgram);
 		void BindMaterial(Material* material);
 
+		void SetClearColour(float r, float g, float b, float a);
+		void ClearBuffers();
+
 		void BindMesh(Mesh* mesh);
 		void DrawMesh(Mesh* mesh);
 	};

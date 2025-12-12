@@ -1,6 +1,7 @@
 #pragma once
 #include "input/InputManager.h"
 #include "graphics/GraphicsAPI.h"
+#include "render/RenderQueue.h"
 #include <memory>
 #include <chrono>
 
@@ -30,6 +31,7 @@ namespace eng
 		Application* GetApplication();
 		InputManager& GetInputManager();
 		GraphicsAPI& GetGraphicsAPI();
+		RenderQueue& GetRenderQueue();
 
 	private:
 		std::unique_ptr<Application> application; 
@@ -37,6 +39,7 @@ namespace eng
 		GLFWwindow* window = nullptr;
 		InputManager inputManager;
 		GraphicsAPI graphicsAPI;
+		RenderQueue renderQueue;
 	};
 }
 
