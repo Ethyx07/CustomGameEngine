@@ -13,4 +13,6 @@ private:
 	eng::Material material;
 
 	std::unique_ptr<eng::Mesh> mesh;
+	float offsetX = 0;
+	float offsetY = 0;
 };

@@ -97,6 +97,7 @@ namespace eng
 			application->Destroy();
 			application.reset();
 		}
+		glfwDestroyWindow(window);
 		glfwTerminate();
 		window = nullptr;
 	}

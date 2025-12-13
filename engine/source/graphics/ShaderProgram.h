@@ -17,6 +17,7 @@ namespace eng
 		void Bind();
 		GLint GetUniformLocation(const std::string& name);
 		void SetUniform(const std::string& name, float value);
+		void SetUniform(const std::string& name, float v1, float v2);
 
 	private:
 		std::unordered_map<std::string, GLint> uniformLocationCache;

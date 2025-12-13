@@ -68,7 +68,7 @@ namespace eng
 
 	void Mesh::Draw()
 	{
-		if (indexCount > 0) 
+		if (indexCount > 0) //Checks if mesh was made with indices (EBO would be created then). Draws elements if there are indices and draws array (VAO) if not
 		{
 			glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, 0);
 		}
