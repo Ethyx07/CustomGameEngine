@@ -265,7 +265,13 @@ int main()
         glfwSwapBuffers(window); //Swaps buffers between back and front buffer
         glfwPollEvents();
     }
+    
+    glDeleteVertexArrays(1, &vao);
+    glDeleteBuffers(1, &vbo);
+    glDeleteBuffers(1, &ebo);
+    glDeleteProgram(shaderProgram);
 
+    glfwDestroyWindow(window);
     glfwTerminate();
 
     return 0;
