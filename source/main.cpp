@@ -6,6 +6,22 @@
 
 using namespace std;
 
+struct Vec3 //Not using glm library
+{
+    float r;
+    float g;
+    float b;
+};
+struct Object
+{
+    float offsetX;
+    float offsetY;
+    float speed;
+    int indicesCount; //Added indices count so we can change the shape from triangle to rectangle
+    bool bAnimated;
+    bool bControlled;
+    Vec3 colour;
+};
 
 struct Vec2 
 {
@@ -14,10 +30,18 @@ struct Vec2
 };
 
 Vec2 offset;
+Object objects[5] = 
+{
+    {0.0f, 0.0f, 1.0f, 3,false, false, {1.0f, 0.0f, 0.0f}},
+    {0.5f, 0.0f, 1.0f, 3,false, false, {0.0f, 1.0f, 1.0f}},
+    {-0.5f, 1.0f, 1.0f, 3,false, false, {0.0f, 0.5f, 1.0f}},
+    {0.0f, 0.0f, 1.0f, 3,false, true, {1.0f, 0.0f, 1.0f}},
+    {0.5f, 0.5f, 1.0f, 6,true, false, {0.5f, 0.3f, 0.7f}}
+};
 
 void keyCallback(GLFWwindow* window, int key, int scanCode, int action, int mods) 
 {
-    if (action == GLFW_PRESS) 
+    /*if (action == GLFW_PRESS) 
     {
         switch (key) 
         {
@@ -31,7 +55,7 @@ void keyCallback(GLFWwindow* window, int key, int scanCode, int action, int mods
             offset.x -= 0.01f; break;
         default: break;
         }
-    }
+    }*/
 }
 
 int main()
@@ -65,15 +89,16 @@ int main()
     string vertexShaderSource = R"(
         #version 330 core
         layout (location = 0) in vec3 position;
-        layout (location = 1) in vec3 color;
+    
 
+        out vec3 fragColor;
+        uniform vec3 uColor;
         uniform vec2 uOffset;
-
-        out vec3 vColor;
+       
         
         void main()
         {
-            vColor = color;
+            fragColor = uColor;
             gl_Position = vec4(position.x + uOffset.x, position.y + uOffset.y, position.z, 1.0);
         }
     )";
@@ -97,12 +122,11 @@ int main()
         #version 330 core
         out vec4 FragColor;
 
-        in vec3 vColor;
-        uniform vec4 uColor;
+        in vec3 fragColor;
 
         void main()
         {
-            FragColor = vec4(vColor, 1.0f) * uColor;
+            FragColor = vec4(fragColor, 1.0f);
         }
     )";
 
@@ -182,20 +206,62 @@ int main()
 
     GLint uColorLoc = glGetUniformLocation(shaderProgram, "uColor");
     GLint uOffsetLoc = glGetUniformLocation(shaderProgram, "uOffset");    
+    
+    float deltaTime = 0.0f; //Creates delta time and last time float
+    float lastTime = 0.0f;
 
     while (!glfwWindowShouldClose(window))  //Loops until window is prompted to close
     {
-        glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
+        float t = (float)glfwGetTime();
+        deltaTime = t - lastTime;
+        lastTime = t;
+
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(shaderProgram);
-        glUniform4f(uColorLoc, 0.0f, 1.0f, 0.0f, 1.0f);
-        glUniform2f(uOffsetLoc, offset.x, offset.y);
         glBindVertexArray(vao);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        glUniform4f(uColorLoc, 1.0f, 0.0f, 0.0f, 1.0f);
-        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+        for (auto& obj : objects) 
+        {
+            float x = obj.offsetX;
+            float y = obj.offsetY;
 
+            if (obj.bAnimated)
+            {
+                obj.colour.g = 0.5f + (0.5f * sin(t));
+                x = sin(glfwGetTime());
+                y = tan(glfwGetTime());
+
+            }
+            if (obj.bControlled) //Key inputs move the triangle and update its new offset
+            {
+                if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+                {
+                    x -= obj.speed * deltaTime;
+                    obj.offsetX = x;
+                }
+                if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+                {
+                    x += obj.speed * deltaTime;
+                    obj.offsetX = x;
+                }
+                if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+                {
+                    y += obj.speed * deltaTime;
+                    obj.offsetY = y;
+                }
+                if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+                {
+                    y -= obj.speed * deltaTime; 
+                    obj.offsetY = y;
+                }
+            }
+
+            glUniform2f(uOffsetLoc, x, y);
+            glUniform3f(uColorLoc, obj.colour.r, obj.colour.g, obj.colour.b);
+
+            glDrawElements(GL_TRIANGLES, obj.indicesCount, GL_UNSIGNED_INT, nullptr);
+        }
         glfwSwapBuffers(window); //Swaps buffers between back and front buffer
         glfwPollEvents();
     }
