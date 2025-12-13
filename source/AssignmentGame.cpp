@@ -1,11 +1,8 @@
-#include "Game.h"
-#include <GLFW/glfw3.h>
+#include "AssignmentGame.h"
+#include "GLFW/glfw3.h"
 #include <iostream>
-#include <string>
 
-int loops = 0;
-
-bool Game::Init()
+bool AssignmentGame::Init()
 {
     std::string vertexShaderSource = R"(
         #version 330 core
@@ -31,10 +28,11 @@ bool Game::Init()
         out vec3 vColor;
 
         uniform vec2 uOffset;
+        uniform float uGreen;
         
         void main()
         {
-            vColor = vec3(color.g, color.r, color.b);
+            vColor = vec3(0.5f, uGreen, 0.7f);
             gl_Position = vec4(position.x + uOffset.x, position.y + uOffset.y, position.z, 1.0);
         }
     )";
@@ -51,12 +49,13 @@ bool Game::Init()
             FragColor = vec4(vColor, 1.0f);
         }
     )";
-    
-    auto& graphicsAPI = eng::Engine::GetInstance().GetGraphicsAPI(); //Gets our graphics API from our engine instance
-    auto shaderProgram = graphicsAPI.CreateShaderProgram(vertexShaderSource, fragmentShaderSource); //Creates a shader program using the graphicsAPI
-    auto shaderProgram2 = graphicsAPI.CreateShaderProgram(vertexShaderSource1, fragmentShaderSource);
+
+	auto& graphicsAPI = eng::Engine::GetInstance().GetGraphicsAPI();
+    auto shaderProgram = graphicsAPI.CreateShaderProgram(vertexShaderSource, fragmentShaderSource);
+    auto shaderProgram1 = graphicsAPI.CreateShaderProgram(vertexShaderSource1, fragmentShaderSource);
+
     material.SetShaderProgram(shaderProgram);
-    material2.SetShaderProgram(shaderProgram2);
+    material2.SetShaderProgram(shaderProgram1);
 
     std::vector<float> vertices =
     {
@@ -73,7 +72,6 @@ bool Game::Init()
     }; //Creates indices to be used for index buffer
 
     eng::VertexLayout vertexLayout;
-    //Position IN from vertex shader
     vertexLayout.elements.push_back({
         0,
         3,
@@ -81,28 +79,36 @@ bool Game::Init()
         0
         });
 
-    //Colour IN from vertex shader
     vertexLayout.elements.push_back({
         1,
         3,
         GL_FLOAT,
         sizeof(float) * 3
         });
+
     vertexLayout.stride = sizeof(float) * 6;
 
     mesh = std::make_unique<eng::Mesh>(vertexLayout, vertices, indices); //Creates unique mesh that has the vertices and indices above as well as the vertex layout
 
-	return true;
+    return true;
 }
 
-void Game::Update(float deltaTime)
-{	
-	auto& input = eng::Engine::GetInstance().GetInputManager();
-	//Horizontal Movement
+void AssignmentGame::Update(float deltaTime)
+{
+    time += deltaTime;
+    fpsCounter += 1;
+    timeSinceLastSecond += deltaTime; //Basic fps counter that adds the fps each update until its been a second and then prints and resets
+    if (timeSinceLastSecond >= 1.0f) {
+        std::cout << "FPS: " << fpsCounter << std::endl;
+        fpsCounter = 0;
+        timeSinceLastSecond = 0;
+    }
+    auto& input = eng::Engine::GetInstance().GetInputManager();
+    //Horizontal Movement
     if (input.isKeyPressed(GLFW_KEY_A))
-	{
+    {
         offsetX -= 1.0f * deltaTime;
-	}
+    }
     if (input.isKeyPressed(GLFW_KEY_D)) {
         offsetX += 1.0f * deltaTime;
     }
@@ -114,25 +120,40 @@ void Game::Update(float deltaTime)
     if (input.isKeyPressed(GLFW_KEY_S)) {
         offsetY -= 1.0f * deltaTime;
     }
-    
 
-    material.SetParam("uOffset", offsetX, offsetY);
+    
     eng::RenderCommand command;
-    if (input.isKeyPressed(GLFW_KEY_SPACE)) {
+
+    if (bToggleCooldown) { //Creates a toggle cooldown for changing materials since this is called every frame
+        currentCooldown += deltaTime;
+        if (currentCooldown >= toggleCooldown) {
+            bToggleCooldown = false;
+            currentCooldown = 0.0f;
+        }
+    }
+
+    if (input.isKeyPressed(GLFW_KEY_SPACE) && !bToggleCooldown) { //Changes what material is being applied to the mesh
+        bToggle = !bToggle; //Swaps toggle around
+        bToggleCooldown = true;
+    }
+    if (bToggle) {
+        float greenOffset = 0.5f + (0.5f * sin(time));
+        material2.SetParam("uOffset", offsetX, offsetY);
+        material2.SetParam("uGreen", greenOffset);
         command.material = &material2;
     }
-    else
-    {
+    else {
+        material.SetParam("uOffset", offsetX, offsetY);
         command.material = &material;
     }
-    
     command.mesh = mesh.get();
 
     auto& renderQueue = eng::Engine::GetInstance().GetRenderQueue();
     renderQueue.Submit(command);
+
 }
 
-void Game::Destroy()
+void AssignmentGame::Destroy()
 {
-
+   
 }
