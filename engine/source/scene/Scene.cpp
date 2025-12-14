@@ -138,7 +138,7 @@ namespace eng
 						currentElement = currentElement->GetParent();
 					}
 
-					if (!foundDescendent)
+					if (!foundDescendent) //Means object can safely be added without causing a circular dependency issue
 					{
 						parent->children.push_back(std::move(*it));
 						obj->parent = parent;

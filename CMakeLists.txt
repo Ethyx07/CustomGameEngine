@@ -10,6 +10,8 @@ set(PROJECT_SOURCE_FILES
   source/Game.cpp
   source/AssignmentGame.h
   source/AssignmentGame.cpp
+  source/TestObject.h
+  source/TestObject.cpp
 )
 
 include_directories(engine/thirdparty/glew/include)
