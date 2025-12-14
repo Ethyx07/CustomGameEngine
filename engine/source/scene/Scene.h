@@ -10,21 +10,21 @@ namespace eng
 	class Scene
 	{
 	public:
-		void Update(float deltaTime);
-		void Clear();
+        void Update(float deltaTime);
+        void Clear();
 
-		GameObject* CreateObject(const std::string& name, GameObject* parent = nullptr);
+        GameObject* CreateObject(const std::string& name, GameObject* parent = nullptr);
 
-		template<typename T, typename = typename std::enable_if_t<std::is_base_of_v><GameObject, T>>>;
-		T* CreateObject(const std::string& name, GameObject* parent = nullptr)
-		{
-			auto obj = new T();
-			obj->SetName(name);
-			SetParent(obj, parent);
-			return obj;
-		}
+        template<typename T, typename = typename std::enable_if_t<std::is_base_of_v<GameObject, T>>>
+        T* CreateObject(const std::string& name, GameObject* parent = nullptr)
+        {
+            auto obj = new T();
+            obj->SetName(name);
+            SetParent(obj, parent);
+            return obj;
+        }
 
-		void SetParent(GameObject* obj, GameObject* parent);
+        bool SetParent(GameObject* obj, GameObject* parent);
 
 	private:
 		std::vector<std::unique_ptr<GameObject>> objects;

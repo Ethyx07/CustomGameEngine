@@ -4,7 +4,7 @@ namespace eng
 {
 	void GameObject::Update(float deltaTime)
 	{
-		for (auto iterator = children.begin(); it != children.end()) //Loops through vector of gameobject children
+		for (auto iterator = children.begin(); iterator != children.end();) //Loops through vector of gameobject children
 		{
 			if ((*iterator)->GetIsAlive()) //Updates it if its alive
 			{
@@ -13,7 +13,7 @@ namespace eng
 			}
 			else
 			{
-				(*iterator) = children.erase(iterator) //If its not alive/getting destroyed it is erased from the vector
+				(iterator) = children.erase(iterator); //If its not alive/getting destroyed it is erased from the vector
 			}
 		}
 	}
