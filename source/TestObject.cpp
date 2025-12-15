@@ -12,11 +12,13 @@ TestObject::TestObject()
         out vec3 vColor;
 
         uniform mat4 uModel;
+        uniform mat4 uView;
+        uniform mat4 uProjection;
         
         void main()
         {
             vColor = color;
-            gl_Position = uModel * vec4(position, 1.0f);
+            gl_Position = uProjection * uView * uModel * vec4(position, 1.0f);
         }
     )";
 
@@ -29,11 +31,13 @@ TestObject::TestObject()
 
         uniform mat4 uModel;
         uniform float uGreen;
+        uniform mat4 uView;
+        uniform mat4 uProjection;
         
         void main()
         {
             vColor = vec3(0.5f, uGreen, 0.7f);
-            gl_Position = uModel * vec4(position, 1.0);
+            gl_Position = uProjection * uView * uModel * vec4(position, 1.0f);
         }
     )";
 

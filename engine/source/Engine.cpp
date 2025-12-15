@@ -84,7 +84,16 @@ namespace eng
 			graphicsAPI.SetClearColour(1.0f, 1.0f, 1.0f, 1.0f);
 			graphicsAPI.ClearBuffers();
 
-			renderQueue.Draw(graphicsAPI);
+			CameraData cameraData;
+			if (currentScene)
+			{
+				if (auto cameraObject = currentScene->GetMainCamera()) 
+				{
+					//Logic for getting matrices
+				}
+			}
+
+			renderQueue.Draw(graphicsAPI, cameraData);
 
 			glfwSwapBuffers(window);
 		}
@@ -125,6 +134,16 @@ namespace eng
 	RenderQueue& Engine::GetRenderQueue()
 	{
 		return renderQueue;
+	}
+
+	void Engine::SetScene(Scene* scene)
+	{
+		currentScene.reset(scene);
+	}
+
+	Scene* Engine::GetScene()
+	{
+		return currentScene.get();
 	}
 
 }

@@ -11,12 +11,15 @@ namespace eng
 		commandList.push_back(command);  //Adds render command to list. command contains a mesh and material
 	}
 
-	void RenderQueue::Draw(GraphicsAPI& graphicsAPI)
+	void RenderQueue::Draw(GraphicsAPI& graphicsAPI, const CameraData& cameraData)
 	{
 		for (auto& command : commandList)
 		{
 			graphicsAPI.BindMaterial(command.material); //Binds material
-			command.material->GetShaderProgram()->SetUniform("uModel", command.modelMatrix);
+			auto shaderProgram = command.material->GetShaderProgram(); //Gets shader program to be used for uniform data and camera data
+			shaderProgram->SetUniform("uModel", command.modelMatrix);
+			shaderProgram->SetUniform("uView", cameraData.viewMatrix);
+			shaderProgram->SetUniform("uProjection", cameraData.projectionMatrix);
 			graphicsAPI.BindMesh(command.mesh); //Binds the mesh
 			graphicsAPI.DrawMesh(command.mesh);
 		}

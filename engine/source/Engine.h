@@ -2,6 +2,7 @@
 #include "input/InputManager.h"
 #include "graphics/GraphicsAPI.h"
 #include "render/RenderQueue.h"
+#include "scene/Scene.h"
 #include <memory>
 #include <chrono>
 
@@ -33,6 +34,9 @@ namespace eng
 		GraphicsAPI& GetGraphicsAPI();
 		RenderQueue& GetRenderQueue();
 
+		void SetScene(Scene* scene);
+		Scene* GetScene();
+
 	private:
 		std::unique_ptr<Application> application; 
 		std::chrono::steady_clock::time_point lastTimePoint;
@@ -40,6 +44,7 @@ namespace eng
 		InputManager inputManager;
 		GraphicsAPI graphicsAPI;
 		RenderQueue renderQueue;
+		std::unique_ptr<Scene> currentScene;
 	};
 }
 
