@@ -85,7 +85,7 @@ namespace eng
 		//Rotation
 		matrix = glm::rotate(matrix, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f)); //Rotation on x axis
 		matrix = glm::rotate(matrix, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f)); //Rotation on y axis
-		matrix = glm::rotate(matrix, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f)); //Rotation on z axis[=6
+		matrix = glm::rotate(matrix, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f)); //Rotation on z axis
 		
 		//Scale
 		matrix = glm::scale(matrix, scale);

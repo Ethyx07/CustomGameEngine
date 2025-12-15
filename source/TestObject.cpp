@@ -124,6 +124,8 @@ void TestObject::Update(float deltaTime)
     }
 
     SetPosition(position);
+    //SetScale(glm::vec3((3.0f * sin(time)), 0.5f, 0.5f));
+    //SetRotation(glm::vec3(0.0f,0.0f,(3.0f * sin(time))));
     eng::RenderCommand command;
 
     if (bToggleCooldown) { //Creates a toggle cooldown for changing materials since this is called every frame
