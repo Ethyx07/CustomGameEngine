@@ -89,7 +89,7 @@ namespace eng
 			{
 				if (auto cameraObject = currentScene->GetMainCamera()) 
 				{
-					//Logic for getting matrices
+					
 				}
 			}
 
