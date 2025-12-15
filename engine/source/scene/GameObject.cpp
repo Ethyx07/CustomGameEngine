@@ -1,4 +1,6 @@
 #include "scene/GameObject.h"
+#include <glm/gtc/matrix_transform.hpp>
+
 
 namespace eng
 {
@@ -41,5 +43,62 @@ namespace eng
 	void GameObject::MarkForDestroy()
 	{
 		bIsAlive = false;
+	}
+
+	const glm::vec3& GameObject::GetPosition() const
+	{
+		return position;
+	}
+
+	void GameObject::SetPosition(const glm::vec3& pos)
+	{
+		position = pos;
+	}
+
+	const glm::vec3& GameObject::GetRotation() const
+	{
+		return rotation;
+	}
+
+	void GameObject::SetRotation(const glm::vec3& rot)
+	{
+		rotation = rot;
+	}
+
+	const glm::vec3& GameObject::GetScale() const
+	{
+		return scale;
+	}
+
+	void GameObject::SetScale(const glm::vec3& scal)
+	{
+		scale = scal;
+	}
+
+	glm::mat4 GameObject::GetLocalTransform() const
+	{
+		glm::mat4 matrix = glm::mat4(1.0f); //Creates identity matrix
+
+		//Translation
+		matrix = glm::translate(matrix, position);
+
+		//Rotation
+		matrix = glm::rotate(matrix, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f)); //Rotation on x axis
+		matrix = glm::rotate(matrix, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f)); //Rotation on y axis
+		matrix = glm::rotate(matrix, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f)); //Rotation on z axis[=6
+		
+		//Scale
+		matrix = glm::scale(matrix, scale);
+
+		return matrix;
+	}
+
+	glm::mat4 GameObject::GetWorldTransform() const
+	{
+		if (parent)
+		{
+			return parent->GetWorldTransform() * GetLocalTransform(); //Keeps calling world transforms for parents until it reaches the top parent
+		}
+		else return GetLocalTransform();
 	}
 }

@@ -8,6 +8,12 @@ namespace eng
 		shaderProgram = shaderProg; //Sets the shader program for this material to the parameter
 	}
 
+	ShaderProgram* Material::GetShaderProgram()
+	{
+		return shaderProgram.get();
+	}
+
+
 	void Material::SetParam(const std::string& name, float value)
 	{
 		floatParams[name] = value; //Stores the name of the uniform and the value of it (only for 1 float uniforms)

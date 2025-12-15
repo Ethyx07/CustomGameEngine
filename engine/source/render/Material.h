@@ -11,10 +11,13 @@ namespace eng
 	{
 	public:
 		void SetShaderProgram(const std::shared_ptr<ShaderProgram>& shaderProg);
+		ShaderProgram* GetShaderProgram();
+
 		void SetParam(const std::string& name, float value);
 		void SetParam(const std::string& name, float v1, float v2);
 		void Bind();
 
+		
 	private:
 		std::shared_ptr<ShaderProgram> shaderProgram;
 		std::unordered_map<std::string, float> floatParams;

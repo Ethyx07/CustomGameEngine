@@ -23,6 +23,9 @@ add_executable(${PROJECT_NAME} ${PROJECT_SOURCE_FILES})
 add_subdirectory(engine "${CMAKE_CURRENT_BINARY_DIR}/engine_build")
 include_directories(engine/source)
 # Link engine library
+
+include_directories(engine/thirdparty/glm-1.0.1)
+
 target_link_libraries(${PROJECT_NAME} 
     Engine
 )
