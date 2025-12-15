@@ -10,9 +10,6 @@ public:
 	void Update(float deltaTime) override;
 
 private:
-	eng::Material material;
-	eng::Material material2;
-	std::shared_ptr<eng::Mesh> mesh;
 
 	bool bToggle = false;
 	bool bToggleCooldown = false;

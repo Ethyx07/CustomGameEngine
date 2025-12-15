@@ -1,4 +1,5 @@
 #pragma once
+#include "scene/Component.h"
 #include <string>
 #include <vector>
 #include <memory>
@@ -17,6 +18,8 @@ namespace eng
 		GameObject* GetParent();
 		bool GetIsAlive() const;
 		void MarkForDestroy();
+
+		void AddComponent(Component* component);
 
 		const glm::vec3& GetPosition() const;
 		void SetPosition(const glm::vec3& pos);
@@ -38,6 +41,7 @@ namespace eng
 		std::string name;
 		GameObject* parent = nullptr;
 		std::vector<std::unique_ptr<GameObject>> children;
+		std::vector<std::unique_ptr<Component>> components;
 		bool bIsAlive = true;
 		glm::vec3 position = glm::vec3(0.0f);
 		glm::vec3 rotation = glm::vec3(0.0f);

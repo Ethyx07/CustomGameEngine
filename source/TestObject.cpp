@@ -54,8 +54,10 @@ TestObject::TestObject()
     auto shaderProgram = graphicsAPI.CreateShaderProgram(vertexShaderSource, fragmentShaderSource);
     auto shaderProgram1 = graphicsAPI.CreateShaderProgram(vertexShaderSource1, fragmentShaderSource);
 
-    material.SetShaderProgram(shaderProgram);
-    material2.SetShaderProgram(shaderProgram1);
+    auto material = std::make_shared<eng::Material>();
+    auto material2 = std::make_shared < eng::Material>();
+    material->SetShaderProgram(shaderProgram);
+    material2->SetShaderProgram(shaderProgram1);
 
     std::vector<float> vertices =
     {
@@ -88,8 +90,10 @@ TestObject::TestObject()
 
     vertexLayout.stride = sizeof(float) * 6;
 
-    mesh = std::make_unique<eng::Mesh>(vertexLayout, vertices, indices); //Creates unique mesh that has the vertices and indices above as well as the vertex layout
 
+   auto mesh = std::make_shared<eng::Mesh>(vertexLayout, vertices, indices); //Creates unique mesh that has the vertices and indices above as well as the vertex layout
+
+   AddComponent(new eng::MeshComponent(material, mesh));
 }
 
 void TestObject::Update(float deltaTime)
@@ -126,32 +130,6 @@ void TestObject::Update(float deltaTime)
     SetPosition(position);
     //SetScale(glm::vec3((3.0f * sin(time)), 0.5f, 0.5f));
     //SetRotation(glm::vec3(0.0f,0.0f,(3.0f * sin(time))));
-    eng::RenderCommand command;
 
-    if (bToggleCooldown) { //Creates a toggle cooldown for changing materials since this is called every frame
-        currentCooldown += deltaTime;
-        if (currentCooldown >= toggleCooldown) {
-            bToggleCooldown = false;
-            currentCooldown = 0.0f;
-        }
-    }
-
-    if (input.isKeyPressed(GLFW_KEY_SPACE) && !bToggleCooldown) { //Changes what material is being applied to the mesh
-        bToggle = !bToggle; //Swaps toggle around
-        bToggleCooldown = true;
-    }
-    if (bToggle) { //Toggles between the material being used
-        float greenOffset = 0.5f + (0.5f * sin(time));
-        material2.SetParam("uGreen", greenOffset);
-        command.material = &material2;
-    }
-    else {
-        command.material = &material;
-    }
-    command.mesh = mesh.get();
-    command.modelMatrix = GetWorldTransform();
-
-    auto& renderQueue = eng::Engine::GetInstance().GetRenderQueue();
-    renderQueue.Submit(command);
 
 }
