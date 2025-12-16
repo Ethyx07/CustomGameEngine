@@ -21,25 +21,36 @@ namespace eng
 			float deltaX = currentPos.x - oldPos.x;
 			float deltaY = currentPos.y - oldPos.y;
 
+
 			//Rotation around y axis
-			rotation.y -= deltaX * sensitivity * deltaTime;
+			float yAngle = -deltaX * sensitivity * deltaTime;
+			glm::quat yRot = glm::angleAxis(yAngle, glm::vec3(0.0f, 1.0f, 0.0f));
+			//rotation.y -= deltaX * sensitivity * deltaTime;
 
 			//Rotation around x axis
-			rotation.x -= deltaY * sensitivity * deltaTime;
+			float xAngle = -deltaY * sensitivity * deltaTime;
+			glm::vec3 rightVector = rotation * glm::vec3(1.0f, 0.0f, 0.0f);
+			glm::quat xRot = glm::angleAxis(xAngle, rightVector);
+
+			glm::quat deltaRotation = yRot * xRot;
+			rotation = glm::normalize(deltaRotation * rotation);
+			//rotation.x -= deltaY * sensitivity * deltaTime;
 
 			owner->SetRotation(rotation);
 		}
 
-		glm::mat4 rotationMatrix(1.0f);
-		rotationMatrix = glm::rotate(rotationMatrix, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f)); //Rotation on x axis
-		rotationMatrix = glm::rotate(rotationMatrix, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f)); //Rotation on y axis
-		rotationMatrix = glm::rotate(rotationMatrix, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f)); //Rotation on z axis
-
-		glm::vec3 forwardVector = glm::normalize(glm::vec3(rotationMatrix * glm::vec4(0.0f, 0.0f, -1.0f, 0.0f))); //Gets the normalised direction of our forward vector
-		glm::vec3 rightVector = glm::normalize(glm::vec3(rotationMatrix * glm::vec4(1.0f, 0.0f, 0.0f, 0.0f))); //Gets the normalised direction of our right vector
+		glm::vec3 forwardVector = rotation * glm::vec3(0.0f, 0.0f, -1.0f); //Gets the normalised direction of our forward vector
+		glm::vec3 rightVector = rotation * glm::vec3(1.0f, 0.0f, 0.0f); //Gets the normalised direction of our right vector
 
 		auto position = owner->GetPosition();
-
+		if (inputManager.isKeyPressed(GLFW_KEY_SPACE))
+		{
+			moveSpeed = 10.0f;
+		}
+		else
+		{
+			moveSpeed = 2.0f;
+		}
 		//Left/Right Movement
 		if (inputManager.isKeyPressed(GLFW_KEY_A))
 		{

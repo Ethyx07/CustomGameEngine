@@ -11,6 +11,6 @@ namespace eng
 
 	private:
 		float sensitivity = 1.5f;
-		float moveSpeed = 1.0f;
+		float moveSpeed = 2.0f;
 	};
 }

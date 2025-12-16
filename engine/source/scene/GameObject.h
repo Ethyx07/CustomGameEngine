@@ -5,6 +5,7 @@
 #include <memory>
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 namespace eng
 {
@@ -38,8 +39,8 @@ namespace eng
 		const glm::vec3& GetPosition() const;
 		void SetPosition(const glm::vec3& pos);
 
-		const glm::vec3& GetRotation() const;
-		void SetRotation(const glm::vec3& rot);
+		const glm::quat& GetRotation() const;
+		void SetRotation(const glm::quat& rot);
 
 		const glm::vec3& GetScale() const;
 		void SetScale(const glm::vec3& scal);
@@ -58,7 +59,7 @@ namespace eng
 		std::vector<std::unique_ptr<Component>> components;
 		bool bIsAlive = true;
 		glm::vec3 position = glm::vec3(0.0f);
-		glm::vec3 rotation = glm::vec3(0.0f);
+		glm::quat rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
 		glm::vec3 scale = glm::vec3(1.0f);
 
 

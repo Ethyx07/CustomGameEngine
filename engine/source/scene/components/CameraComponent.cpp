@@ -11,7 +11,16 @@ namespace eng
 
 	glm::mat4 CameraComponent::GetViewMatrix() const //View matrix is the inverse of the world transform matrix
 	{
-		return glm::inverse(owner->GetWorldTransform());
+		glm::mat4 matrix = glm::mat4(1.0f);
+		matrix = glm::mat4_cast(owner->GetRotation());
+		matrix[3] = glm::vec4(owner->GetPosition(), 1.0f);
+
+		if (owner->GetParent())
+		{
+			matrix = owner->GetParent()->GetWorldTransform() * matrix;
+		}
+
+		return glm::inverse(matrix);
 	}
 
 	glm::mat4 CameraComponent::GetProjectionMatrix(float aspect) const

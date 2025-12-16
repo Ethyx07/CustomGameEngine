@@ -65,12 +65,12 @@ namespace eng
 		position = pos;
 	}
 
-	const glm::vec3& GameObject::GetRotation() const
+	const glm::quat& GameObject::GetRotation() const
 	{
 		return rotation;
 	}
 
-	void GameObject::SetRotation(const glm::vec3& rot)
+	void GameObject::SetRotation(const glm::quat& rot)
 	{
 		rotation = rot;
 	}
@@ -93,9 +93,7 @@ namespace eng
 		matrix = glm::translate(matrix, position);
 
 		//Rotation
-		matrix = glm::rotate(matrix, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f)); //Rotation on x axis
-		matrix = glm::rotate(matrix, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f)); //Rotation on y axis
-		matrix = glm::rotate(matrix, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f)); //Rotation on z axis
+		matrix = matrix * glm::mat4_cast(rotation); //Converts quaternion into rotation matrix
 		
 		//Scale
 		matrix = glm::scale(matrix, scale);
