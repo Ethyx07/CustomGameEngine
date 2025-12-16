@@ -9,6 +9,10 @@ namespace eng
 {
 	void PlayerControllerComponent::Update(float deltaTime)
 	{
+		if (!bActive) 
+		{
+			return;
+		}
 		auto& inputManager = Engine::GetInstance().GetInputManager();
 		auto rotation = owner->GetRotation();
 
