@@ -1,5 +1,6 @@
 #include "scene/components/CameraComponent.h"
 #include "scene/GameObject.h"
+#include "glm/gtc/matrix_transform.hpp"
 
 namespace eng
 {
@@ -8,13 +9,14 @@ namespace eng
 
 	}
 
-	glm::mat4 CameraComponent::GetViweMatrix() const //View matrix is the inverse of the world transform matrix
+	glm::mat4 CameraComponent::GetViewMatrix() const //View matrix is the inverse of the world transform matrix
 	{
 		return glm::inverse(owner->GetWorldTransform());
 	}
 
-	glm::mat4 CameraComponent::GetProjectionMatrix() const
+	glm::mat4 CameraComponent::GetProjectionMatrix(float aspect) const
 	{
+		return glm::perspective(glm::radians(fov), aspect, nearPlane, farPlane);
 		return glm::mat4(1.0f);
 	}
 }

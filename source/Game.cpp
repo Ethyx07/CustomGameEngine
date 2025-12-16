@@ -4,13 +4,22 @@
 
 bool Game::Init()
 {
-	scene.CreateObject<TestObject>("TestObject");
+	scene = new eng::Scene();
+	auto camera = scene->CreateObject("Camera");
+	camera->AddComponent(new eng::CameraComponent());
+	camera->SetPosition(glm::vec3(0.0f, 0.0f, 2.0f));
+
+	scene->SetMainCamera(camera);
+
+	scene->CreateObject<TestObject>("TestObject");
+
+	eng::Engine::GetInstance().SetScene(scene);
 	return true;
 }
 
 void Game::Update(float deltaTime)
 {	
-	scene.Update(deltaTime);
+	scene->Update(deltaTime);
 }
 
 void Game::Destroy()

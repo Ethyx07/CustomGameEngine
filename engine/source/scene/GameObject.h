@@ -20,16 +20,16 @@ namespace eng
 		void MarkForDestroy();
 
 		void AddComponent(Component* component);
-		template<typename T, typename = typename std::enable_if_t<std::is_base_of_v<Component, T>>
+		template<typename T, typename = typename std::enable_if_t<std::is_base_of_v<Component, T>>>
 		T* GetComponent()
 		{
-			size_t typeId = Component::StaticType<T>();
+			size_t typeId = Component::StaticTypeId<T>();
 
-			for (auto& component : components)
+			for (auto& component : components) //Loops through all components and tries to find the one that the component we are getting shares 
 			{
 				if (component->GetTypeId() == typeId)
 				{
-					return static_cast<T*>(component.get());
+					return static_cast<T*>(component.get()); //Returns reference to that component
 				}
 			}
 			return nullptr;

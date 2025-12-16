@@ -19,4 +19,5 @@ private:
 	float fpsCounter = 0;
 	float timeSinceLastSecond = 0.0f;
 	float time = 0;
+
 };

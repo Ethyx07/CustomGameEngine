@@ -130,6 +130,7 @@ void TestObject::Update(float deltaTime)
     if (input.isKeyPressed(GLFW_KEY_S)) {
         position.y -= 1.0f * deltaTime;
     }
+    
 
     SetPosition(position);
     //SetScale(glm::vec3((3.0f * sin(time)), 0.5f, 0.5f));

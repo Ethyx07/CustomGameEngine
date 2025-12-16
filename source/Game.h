@@ -10,5 +10,5 @@ public:
 	void Destroy() override;
 
 private:
-	eng::Scene scene;
+	eng::Scene* scene = nullptr;
 };

@@ -1,5 +1,8 @@
 #include "Engine.h"
 #include "Application.h"
+#include "scene/GameObject.h"
+#include "scene/Component.h"
+#include "scene/components/CameraComponent.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
@@ -85,11 +88,22 @@ namespace eng
 			graphicsAPI.ClearBuffers();
 
 			CameraData cameraData;
+			int width = 0;
+			int height = 0;
+
+			glfwGetWindowSize(window, &width, &height);
+			float aspect = static_cast<float>(width) / static_cast<float>(height); //Gets the aspect ratio of the screen based on the current window
+
 			if (currentScene)
 			{
 				if (auto cameraObject = currentScene->GetMainCamera()) 
 				{
-					
+					auto cameraComponent = cameraObject->GetComponent<CameraComponent>(); //Gets the current cameras cameraData to pass to our graphicsAPI
+					if (cameraComponent)
+					{
+						cameraData.viewMatrix = cameraComponent->GetViewMatrix();
+						cameraData.projectionMatrix = cameraComponent->GetProjectionMatrix(aspect);
+					}
 				}
 			}
 
