@@ -23,6 +23,28 @@ namespace eng
 		}
 	}
 
+	void mouseButtonCallback(GLFWwindow* window, int button, int action, int)
+	{
+		auto& inputManager = eng::Engine::GetInstance().GetInputManager();
+		if (action == GLFW_PRESS) //Checks if button is pressed. Game can then use this in return
+		{
+			inputManager.SetMouseButtonPressed(button, true);
+		}
+		else if (action == GLFW_RELEASE)
+		{
+			inputManager.SetMouseButtonPressed(button, false);
+		}
+	}
+
+	void cursorPositionCallback(GLFWwindow* window, double xpos, double ypos)
+	{
+		auto& inputManager = eng::Engine::GetInstance().GetInputManager();
+		inputManager.SetOldMousePosition(inputManager.GetCurrentMousePosition()); //Sets current pos to old pos
+
+		glm::vec2 currentPos(static_cast<float>(xpos), static_cast<float>(ypos));
+		inputManager.SetCurrentMousePosition(currentPos);
+	}
+
 	Engine& Engine::GetInstance() //Globally accessible engine
 	{
 		static Engine instance;
@@ -54,6 +76,8 @@ namespace eng
 		}
 
 		glfwSetKeyCallback(window, keyCallback);
+		glfwSetMouseButtonCallback(window, mouseButtonCallback);
+		glfwSetCursorPosCallback(window, cursorPositionCallback); //Sets the callbacks for the mouse input and position for look action
 
 		glfwMakeContextCurrent(window); //Sets window as glfw current context
 
@@ -110,6 +134,8 @@ namespace eng
 			renderQueue.Draw(graphicsAPI, cameraData);
 
 			glfwSwapBuffers(window);
+
+			inputManager.SetOldMousePosition(inputManager.GetCurrentMousePosition());
 		}
 	}
 

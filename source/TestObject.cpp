@@ -113,28 +113,5 @@ void TestObject::Update(float deltaTime)
         fpsCounter = 0;
         timeSinceLastSecond = 0;
     }
-    auto& input = eng::Engine::GetInstance().GetInputManager();
-    //Horizontal Movement
-    if (input.isKeyPressed(GLFW_KEY_A))
-    {
-        position.x -= 1.0f * deltaTime;
-    }
-    if (input.isKeyPressed(GLFW_KEY_D)) {
-        position.x += 1.0f * deltaTime;
-    }
-    //Vertical Movement
-    if (input.isKeyPressed(GLFW_KEY_W))
-    {
-        position.y += 1.0f * deltaTime;
-    }
-    if (input.isKeyPressed(GLFW_KEY_S)) {
-        position.y -= 1.0f * deltaTime;
-    }
-    
-
-    SetPosition(position);
-    //SetScale(glm::vec3((3.0f * sin(time)), 0.5f, 0.5f));
-    //SetRotation(glm::vec3(0.0f,0.0f,(3.0f * sin(time))));
-
 
 }
