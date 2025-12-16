@@ -86,7 +86,7 @@ namespace eng
 			glfwTerminate();
 			return false;
 		}
-
+		graphicsAPI.Init();
 		return application->Init();
 	}
 
