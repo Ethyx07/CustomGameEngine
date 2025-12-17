@@ -12,6 +12,7 @@ set(PROJECT_SOURCE_FILES
   source/AssignmentGame.cpp
   source/TestObject.h
   source/TestObject.cpp
+  source/TestObjectOrbit.cpp
 )
 
 include_directories(engine/thirdparty/glew/include)

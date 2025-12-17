@@ -143,7 +143,7 @@ namespace eng
 					{
 						parent->children.push_back(std::move(*it));
 						obj->parent = parent;
-						currentParent->children.erase(it);
+						objects.erase(it);
 						result = true;
 					}
 				}

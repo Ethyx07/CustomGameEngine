@@ -19,4 +19,8 @@ private:
 
 	float cooldownTimer = 2.0f;
 	float currentCooldownTimer = 0.0f;
+
+	float fpsCounter = 0;
+	float timeSinceLastSecond = 0.0f;
+	float time = 0;
 };
