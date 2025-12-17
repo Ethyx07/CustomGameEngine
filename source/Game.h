@@ -10,9 +10,17 @@ public:
 	void Destroy() override;
 
 private:
-	eng::Material material;
-	eng::Material material2;
-	std::unique_ptr<eng::Mesh> mesh;
-	float offsetX = 0;
-	float offsetY = 0;
+	eng::Scene* scene = nullptr;
+	eng::GameObject* cameraOne = nullptr;
+	eng::GameObject* cameraTwo = nullptr;
+
+	bool bCameraOne = true;
+	bool bCooldown = false;
+
+	float cooldownTimer = 2.0f;
+	float currentCooldownTimer = 0.0f;
+
+	float fpsCounter = 0;
+	float timeSinceLastSecond = 0.0f;
+	float time = 0;
 };

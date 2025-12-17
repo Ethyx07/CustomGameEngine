@@ -2,10 +2,10 @@
 #include <eng.h>
 
 
-class TestObject : public eng::GameObject
+class TestObjectOrbit : public eng::GameObject
 {
 public:
-	TestObject();
+	TestObjectOrbit();
 
 	void Update(float deltaTime) override;
 
