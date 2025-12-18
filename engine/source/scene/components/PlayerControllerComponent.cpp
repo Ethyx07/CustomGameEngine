@@ -9,7 +9,7 @@ namespace eng
 {
 	void PlayerControllerComponent::Update(float deltaTime)
 	{
-		if (!bActive) 
+		if (!GetIsActive()) 
 		{
 			return;
 		}
@@ -75,4 +75,15 @@ namespace eng
 
 		owner->SetPosition(position);
 	}
+
+	void PlayerControllerComponent::SetIsActive(bool bActive)
+	{
+		bIsActive = bActive;
+	}
+
+	bool PlayerControllerComponent::GetIsActive()
+	{
+		return bIsActive;
+	}
+
 }

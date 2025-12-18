@@ -8,11 +8,13 @@ namespace eng
 		COMPONENT(PlayerControllerComponent)
 	public: 
 		void Update(float deltaTime) override;
-		bool bActive = true;
+		void SetIsActive(bool bActive);
+		bool GetIsActive();
 
 	private:
 		float sensitivity = 1.5f;
 		float moveSpeed = 2.0f;
+		bool bIsActive = true;
 
 	};
 }

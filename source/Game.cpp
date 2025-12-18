@@ -19,7 +19,7 @@ bool Game::Init()
 	cameraTwo->AddComponent(new eng::CameraComponent());
 	cameraTwo->SetPosition(glm::vec3(10.0f, 10.0f, 0.0f));
 	cameraTwo->AddComponent(new eng::PlayerControllerComponent());
-	cameraTwo->GetComponent<eng::PlayerControllerComponent>()->bActive = false;
+	cameraTwo->GetComponent<eng::PlayerControllerComponent>()->SetIsActive(false);
 
 	auto obj = scene->CreateObject<TestObject>("TestObject");
 	obj->SetScale(glm::vec3(5.0f, 1.0f, 1.0f));
@@ -71,15 +71,15 @@ void Game::Update(float deltaTime)
 			{
 				scene->SetMainCamera(cameraTwo);
 				bCameraOne = false;
-				cameraOne->GetComponent<eng::PlayerControllerComponent>()->bActive = false;
-				cameraTwo->GetComponent<eng::PlayerControllerComponent>()->bActive = true;
+				cameraOne->GetComponent<eng::PlayerControllerComponent>()->SetIsActive(false);
+				cameraTwo->GetComponent<eng::PlayerControllerComponent>()->SetIsActive(true);
 			}
 			else
 			{
 				scene->SetMainCamera(cameraOne);
 				bCameraOne = true;
-				cameraOne->GetComponent<eng::PlayerControllerComponent>()->bActive = true;
-				cameraTwo->GetComponent<eng::PlayerControllerComponent>()->bActive = false;
+				cameraOne->GetComponent<eng::PlayerControllerComponent>()->SetIsActive(true);
+				cameraTwo->GetComponent<eng::PlayerControllerComponent>()->SetIsActive(false);
 			}
 			bCooldown = true;
 		}
