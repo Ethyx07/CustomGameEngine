@@ -3,6 +3,7 @@
 #include "graphics/GraphicsAPI.h"
 #include "render/RenderQueue.h"
 #include "scene/Scene.h"
+#include "io/FileSystem.h"
 #include <memory>
 #include <chrono>
 

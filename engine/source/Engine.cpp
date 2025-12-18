@@ -176,6 +176,11 @@ namespace eng
 		return renderQueue;
 	}
 
+	FileSystem& Engine::GetFileSystem()
+	{
+		return fileSystem;
+	}
+
 	void Engine::SetScene(Scene* scene)
 	{
 		currentScene.reset(scene);
@@ -186,4 +191,5 @@ namespace eng
 		return currentScene.get();
 	}
 
+	
 }

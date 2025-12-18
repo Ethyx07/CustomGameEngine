@@ -27,6 +27,8 @@ include_directories(engine/source)
 
 include_directories(engine/thirdparty/glm-1.0.1)
 
+include_directories(thirdparty/stb_image)
+
 target_link_libraries(${PROJECT_NAME} 
     Engine
 )
