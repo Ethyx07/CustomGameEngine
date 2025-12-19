@@ -34,6 +34,7 @@ namespace eng
 		InputManager& GetInputManager();
 		GraphicsAPI& GetGraphicsAPI();
 		RenderQueue& GetRenderQueue();
+		FileSystem& GetFileSystem();
 
 		void SetScene(Scene* scene);
 		Scene* GetScene();
@@ -45,7 +46,9 @@ namespace eng
 		InputManager inputManager;
 		GraphicsAPI graphicsAPI;
 		RenderQueue renderQueue;
+		FileSystem fileSystem;
 		std::unique_ptr<Scene> currentScene;
+		
 	};
 }
 

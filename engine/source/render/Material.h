@@ -6,6 +6,7 @@
 namespace eng
 {
 	class ShaderProgram;
+	class Texture;
 
 	class Material
 	{
@@ -15,6 +16,7 @@ namespace eng
 
 		void SetParam(const std::string& name, float value);
 		void SetParam(const std::string& name, float v1, float v2);
+		void SetParam(const std::string& name, const std::shared_ptr<Texture>& texture);
 		void Bind();
 
 		
@@ -22,5 +24,6 @@ namespace eng
 		std::shared_ptr<ShaderProgram> shaderProgram;
 		std::unordered_map<std::string, float> floatParams;
 		std::unordered_map<std::string, std::pair<float, float>> float2Params;
+		std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
 	};
 }

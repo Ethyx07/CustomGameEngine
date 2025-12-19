@@ -47,4 +47,9 @@ namespace eng
 		auto location = GetUniformLocation(name);
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 	}
+
+	void ShaderProgram::SetTexture(const std::string& name, Texture* texture)
+	{
+		
+	}
 }

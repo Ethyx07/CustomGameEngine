@@ -5,8 +5,17 @@
 #include <string>
 #include <iostream>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
+
+
 bool Game::Init()
 {
+	auto& fs = eng::Engine::GetInstance().GetFileSystem();
+	auto path = fs.GetAssetsFolder() / "brick.png";
+
+	int width, height, channels;
+	unsigned char* data = stbi_load(path.string().c_str(), &width, &height, &channels, 0);
 	scene = new eng::Scene();
 	cameraOne = scene->CreateObject("CameraOne");
 	cameraOne->AddComponent(new eng::CameraComponent());
