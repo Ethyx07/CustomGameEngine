@@ -27,5 +27,6 @@ namespace eng
 	private:
 		std::unordered_map<std::string, GLint> uniformLocationCache;
 		GLuint shaderProgramID = 0;
+		int currentTextureUnit = 0;
 	};
 }

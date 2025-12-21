@@ -1,4 +1,5 @@
 #include "graphics/ShaderProgram.h"
+#include "graphics/Texture.h"
 #include "glm/gtc/type_ptr.hpp"
 
 namespace eng
@@ -16,6 +17,7 @@ namespace eng
 	void ShaderProgram::Bind() //Binds shader program as current program to use
 	{
 		glUseProgram(shaderProgramID);
+		currentTextureUnit = 0;
 	}
 
 	GLint ShaderProgram::GetUniformLocation(const std::string& name)
@@ -50,6 +52,12 @@ namespace eng
 
 	void ShaderProgram::SetTexture(const std::string& name, Texture* texture)
 	{
-		
+
+		auto location = GetUniformLocation(name);
+
+		glActiveTexture(GL_TEXTURE0 + currentTextureUnit);
+		glBindTexture(GL_TEXTURE_2D, texture->GetID());
+		glUniform1i(location, currentTextureUnit);
+		currentTextureUnit += 1;
 	}
 }
