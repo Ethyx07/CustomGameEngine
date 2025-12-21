@@ -11,7 +11,7 @@
 bool Game::Init()
 {
     auto& fs = eng::Engine::GetInstance().GetFileSystem();
-    auto texture = eng::Texture::Load("brick.png");
+    auto texture = eng::Texture::Load("textures/brick.png");
 
     scene = new eng::Scene();
 
@@ -29,16 +29,8 @@ bool Game::Init()
 
     scene->CreateObject<TestObject>("TestObject");
 
-
-    std::string vertexShaderSource = fs.LoadAssetFileText("shaders/vertex.glsl"); //Loads the selected vertex shader
-    std::string fragmentShaderSource = fs.LoadAssetFileText("shaders/fragment.glsl");
-
-    auto& graphicsAPI = eng::Engine::GetInstance().GetGraphicsAPI();
-    auto shaderProgram = graphicsAPI.CreateShaderProgram(vertexShaderSource, fragmentShaderSource);
-
-    auto material = std::make_shared<eng::Material>();
-    material->SetShaderProgram(shaderProgram);
-    material->SetParam("brickTexture", texture);
+    auto material = eng::Material::Load("materials/brick.mat");
+    
 
     std::vector<float> vertices =
     {
