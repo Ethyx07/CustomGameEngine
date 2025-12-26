@@ -16,6 +16,7 @@ set(PROJECT_SOURCE_FILES
 	source/Engine.cpp
 	source/Application.h
 	source/Application.cpp
+	source/Common.h
 	source/input/InputManager.h
 	source/input/InputManager.cpp
 	source/graphics/ShaderProgram.h
@@ -41,6 +42,8 @@ set(PROJECT_SOURCE_FILES
 	source/scene/components/MeshComponent.cpp
 	source/scene/components/CameraComponent.h
 	source/scene/components/CameraComponent.cpp
+	source/scene/components/LightComponent.h
+	source/scene/components/LightComponent.cpp
 	source/scene/components/PlayerControllerComponent.h
 	source/scene/components/PlayerControllerComponent.cpp
 	source/io/FileSystem.h
@@ -68,6 +71,7 @@ include_directories(thirdparty/glm-1.0.1)
 
 include_directories(thirdparty/stb_image)
 include_directories(thirdparty/json)
+include_directories(thirdparty/cgltf)
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_BINARY_DIR})
 

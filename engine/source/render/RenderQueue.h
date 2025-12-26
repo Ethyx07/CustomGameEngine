@@ -1,6 +1,8 @@
 #pragma once
+#include "Common.h"
 #include <vector>
-#include "glm/mat4x4.hpp"
+#include <glm/mat4x4.hpp>
+
 
 
 namespace eng
@@ -15,12 +17,6 @@ namespace eng
 		Mesh* mesh = nullptr;
 		Material* material = nullptr;
 		glm::mat4 modelMatrix;
-	};
-
-	struct CameraData
-	{
-		glm::mat4 viewMatrix;
-		glm::mat4 projectionMatrix;
 	};
 
 	class RenderQueue

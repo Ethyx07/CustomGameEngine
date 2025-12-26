@@ -11,7 +11,7 @@
       { "name": "uvOffset", "value1": 0.0, "value2": 0.0 }
     ],
     "textures": [
-      { "name": "baseColourTexture", "path": "textures/brick.png" }
+      { "name": "baseColourTexture", "path": "models/Suzanne_BaseColor.png" }
     ]
   }
 }

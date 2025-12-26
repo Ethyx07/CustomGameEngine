@@ -1,5 +1,6 @@
 #pragma once
 #include "scene/GameObject.h"
+#include "Common.h"
 #include <vector>
 #include <string>
 #include <memory>
@@ -28,6 +29,11 @@ namespace eng
 
         void SetMainCamera(GameObject* camera);
         GameObject* GetMainCamera();
+
+        std::vector<LightData> CollectLights();
+
+    private:
+        void CollectLightsRecursive(GameObject* obj, std::vector<LightData>& out);
 
 	private:
 		std::vector<std::unique_ptr<GameObject>> objects;

@@ -1,4 +1,5 @@
 #include "scene/Scene.h"
+#include "scene/components/LightComponent.h"
 
 
 namespace eng
@@ -161,6 +162,27 @@ namespace eng
 	GameObject* Scene::GetMainCamera() //Returns main camera
 	{
 		return mainCamera;
+	}
+
+	std::vector<LightData> Scene::CollectLights()
+	{
+
+	}
+
+	void Scene::CollectLightsRecursive(GameObject* obj, std::vector<LightData>& out)
+	{
+		if (auto* light = obj->GetComponent<LightComponent>()) //If obj is valid. Once the obj is nullptr that parent to child group is completed
+		{
+			LightData data;
+			data.colour = light->GetColour();
+			data.position = obj->GetWorldPosition();
+			out.push_back(data);
+		}
+
+		for (auto& child : obj->children) //Loops through the children and calls the same function
+		{
+			CollectLightsRecursive(child.get(), out);
+		}
 	}
 
 }

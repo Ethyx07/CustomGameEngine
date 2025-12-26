@@ -10,6 +10,10 @@ namespace eng
 		GLuint size; //Number of components in each set
 		GLuint type; //Data type (GL_FLOAT) etc
 		uint32_t offset; //Byte offset from start of vertex
+
+		static constexpr int PositionIndex = 0;
+		static constexpr int ColourIndex = 1;
+		static constexpr int UVIndex = 2;
 	};
 
 	struct VertexLayout 
