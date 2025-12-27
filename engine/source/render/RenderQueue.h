@@ -23,7 +23,7 @@ namespace eng
 	{
 	public:
 		void Submit(const RenderCommand& command);
-		void Draw(GraphicsAPI& graphicsAPI, const CameraData& cameraData);
+		void Draw(GraphicsAPI& graphicsAPI, const CameraData& cameraData, const std::vector<LightData> lights);
 
 	private:
 		std::vector<RenderCommand> commandList;

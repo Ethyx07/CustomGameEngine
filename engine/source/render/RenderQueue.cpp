@@ -11,7 +11,7 @@ namespace eng
 		commandList.push_back(command);  //Adds render command to list. command contains a mesh and material
 	}
 
-	void RenderQueue::Draw(GraphicsAPI& graphicsAPI, const CameraData& cameraData)
+	void RenderQueue::Draw(GraphicsAPI& graphicsAPI, const CameraData& cameraData, const std::vector<LightData> lights)
 	{
 		for (auto& command : commandList)
 		{
@@ -20,6 +20,13 @@ namespace eng
 			shaderProgram->SetUniform("uModel", command.modelMatrix);
 			shaderProgram->SetUniform("uView", cameraData.viewMatrix);
 			shaderProgram->SetUniform("uProjection", cameraData.projectionMatrix);
+			if (!lights.empty())
+			{
+				auto& light = lights[0];
+				shaderProgram->SetUniform("uLight.colour", light.colour);
+				shaderProgram->SetUniform("uLight.position", light.position);
+			}
+
 			graphicsAPI.BindMesh(command.mesh); //Binds the mesh
 			graphicsAPI.DrawMesh(command.mesh);
 		}

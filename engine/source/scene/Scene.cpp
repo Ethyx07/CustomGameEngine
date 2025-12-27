@@ -166,7 +166,13 @@ namespace eng
 
 	std::vector<LightData> Scene::CollectLights()
 	{
+		std::vector<LightData> lights;
+		for (auto& obj : objects) //Loops through all objects in the scene and collects the lights
+		{
+			CollectLightsRecursive(obj.get(), lights);
+		}
 
+		return lights;
 	}
 
 	void Scene::CollectLightsRecursive(GameObject* obj, std::vector<LightData>& out)
