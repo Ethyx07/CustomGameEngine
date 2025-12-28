@@ -27,9 +27,6 @@ bool Game::Init()
     cameraTwo->AddComponent(new eng::PlayerControllerComponent());
 
     scene->SetMainCamera(cameraOne);
-
-    scene->CreateObject<TestObject>("TestObject");
-
     auto material = eng::Material::Load("materials/brick.mat");
 
 
@@ -53,11 +50,16 @@ bool Game::Init()
 	auto suzanneObj = eng::GameObject::LoadGLTF("models/suzanne/Suzanne.gltf");
 	suzanneObj->SetPosition(glm::vec3(0.0f, 0.0f, -5.0f));
 
+	auto gunObj = eng::GameObject::LoadGLTF("models/weapons/scene.gltf");
+	gunObj->SetParent(cameraOne);
+	gunObj->SetPosition(glm::vec3(0.75f, -0.5f, -0.75f));
+	gunObj->SetScale(glm::vec3(-1.0f, 1.0f, 1.0f));
+
     auto light = scene->CreateObject("Light");
     auto lightComp = new eng::LightComponent();
     lightComp->SetColour(glm::vec3(1.0f));
     light->AddComponent(lightComp);
-    light->SetPosition(glm::vec3(0.0f, 5.0f, 0.0f));
+    light->SetPosition(glm::vec3(0.0f, 0.0f, 5.0f));
 
 
     

@@ -125,6 +125,7 @@ namespace eng
 				{
 					std::unique_ptr<GameObject> objHolder(obj);
 					objects.push_back(std::move(objHolder));
+					obj->parent = parent; 
 					result = true;
 				}
 				else

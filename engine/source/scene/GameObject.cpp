@@ -14,9 +14,6 @@
 #define CGLTF_IMPLEMENTATION
 #include <cgltf.h>
 
-#include <iostream>
-#include <string>
-
 namespace eng
 {
 	void GameObject::Update(float deltaTime)
@@ -338,7 +335,7 @@ namespace eng
 							if (texture->image->uri)
 							{
 								auto path = folder / std::string(texture->image->uri);
-								auto tex = Texture::Load(path.string()); //Loads texture
+								auto tex = Engine::GetInstance().GetTextureManager().GetOrLoadTexture(path.string()); //Loads texture or returns already loaded texture
 								mat->SetParam("baseColourTexture", tex); //Applies texture as shader material baseColourTexture
 							}
 						}
@@ -352,7 +349,7 @@ namespace eng
 							if (texture->image->uri)
 							{
 								auto path = folder / std::string(texture->image->uri);
-								auto tex = Texture::Load(path.string());
+								auto tex = Engine::GetInstance().GetTextureManager().GetOrLoadTexture(path.string());
 								mat->SetParam("baseColourTexture", tex);
 							}
 						}

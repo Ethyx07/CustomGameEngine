@@ -2,6 +2,7 @@
 #include "input/InputManager.h"
 #include "graphics/GraphicsAPI.h"
 #include "render/RenderQueue.h"
+#include "graphics/Texture.h"
 #include "scene/Scene.h"
 #include "io/FileSystem.h"
 #include <memory>
@@ -35,6 +36,7 @@ namespace eng
 		GraphicsAPI& GetGraphicsAPI();
 		RenderQueue& GetRenderQueue();
 		FileSystem& GetFileSystem();
+		TextureManager& GetTextureManager();
 
 		void SetScene(Scene* scene);
 		Scene* GetScene();
@@ -47,6 +49,7 @@ namespace eng
 		GraphicsAPI graphicsAPI;
 		RenderQueue renderQueue;
 		FileSystem fileSystem;
+		TextureManager textureManager;
 		std::unique_ptr<Scene> currentScene;
 		
 	};

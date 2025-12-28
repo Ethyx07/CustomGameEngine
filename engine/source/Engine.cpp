@@ -128,6 +128,7 @@ namespace eng
 					{
 						cameraData.viewMatrix = cameraComponent->GetViewMatrix();
 						cameraData.projectionMatrix = cameraComponent->GetProjectionMatrix(aspect);
+						cameraData.position = cameraObject->GetWorldPosition();
 					}
 				}
 
@@ -182,6 +183,11 @@ namespace eng
 	FileSystem& Engine::GetFileSystem()
 	{
 		return fileSystem;
+	}
+
+	TextureManager& Engine::GetTextureManager()
+	{
+		return textureManager;
 	}
 
 	void Engine::SetScene(Scene* scene)

@@ -30,7 +30,16 @@ namespace eng
 		glGenTextures(1, &textureID); //Generates this texture
 		glBindTexture(GL_TEXTURE_2D, textureID); //Binds/Activates the texture with that ID
 
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		GLint internalFormat = GL_RGB;
+		GLenum format = GL_RGB;
+
+		if (numChannels == 4) //Allows for textures with 4 channels to be loaded correctly
+		{
+			internalFormat = GL_RGBA;
+			format = GL_RGBA;
+		}
+
+		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 
 		glGenerateMipmap(GL_TEXTURE_2D);
 
@@ -61,5 +70,18 @@ namespace eng
 			stbi_image_free(data);
 			return result;
 		}
+	}
+
+	std::shared_ptr<Texture> TextureManager::GetOrLoadTexture(const std::string& path) //Checks if texture manager has texture loaded already (path is key)
+	{
+		auto it = textures.find(path);
+		if (it != textures.end()) //If already in map, return it instead of loading it again
+		{
+			return it->second;
+		}
+
+		auto texture = Texture::Load(path); //If its not in the manager load it instead
+		textures[path] = texture;
+		return texture;
 	}
 }
