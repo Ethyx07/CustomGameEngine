@@ -14,6 +14,9 @@
 #define CGLTF_IMPLEMENTATION
 #include <cgltf.h>
 
+#include <iostream>
+#include <string>
+
 namespace eng
 {
 	void GameObject::Update(float deltaTime)
@@ -155,9 +158,9 @@ namespace eng
 			glm::quat orientation;
 			glm::decompose(mat, scale, orientation, translation, skew, perspective);
 
-			/*object->SetPosition(translation);
+			object->SetPosition(translation);
 			object->SetRotation(orientation);
-			object->SetScale(scale);*/
+			object->SetScale(scale);
 		}
 		else //If it doesnt then it may contain one or few bits of data (may have translation, scale, or neither)
 		{
