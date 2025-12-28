@@ -49,6 +49,8 @@ namespace eng
 		glm::mat4 GetLocalTransform() const;
 		glm::mat4 GetWorldTransform() const;
 
+		static GameObject* LoadGLTF(const std::string& path);
+
 
 	protected:
 		GameObject() = default;
