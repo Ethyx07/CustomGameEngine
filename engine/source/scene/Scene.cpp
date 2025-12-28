@@ -30,6 +30,7 @@ namespace eng
 		auto obj = new GameObject();
 		obj->SetName(name);
 		SetParent(obj, parent);
+		obj->scene = this;
 		return obj;
 	}
 

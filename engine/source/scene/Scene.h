@@ -22,6 +22,7 @@ namespace eng
             auto obj = new T();
             obj->SetName(name);
             SetParent(obj, parent);
+            obj->scene = this;
             return obj;
         }
 

@@ -1,6 +1,10 @@
 #include "scene/GameObject.h"
 #include "Engine.h"
 #include "graphics/VertexLayout.h"
+#include "graphics/Texture.h"
+#include "render/Material.h"
+#include "render/Mesh.h"
+#include "scene/components/MeshComponent.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -45,6 +49,21 @@ namespace eng
 	GameObject* GameObject::GetParent()
 	{
 		return parent;
+	}
+
+	bool GameObject::SetParent(GameObject* parent)
+	{
+		if (!scene)
+		{
+			return false;
+		}
+
+		return scene->SetParent(this, parent);
+	}
+
+	Scene* GameObject::GetScene()
+	{
+		return scene;
 	}
 
 	bool GameObject::GetIsAlive() const
@@ -136,9 +155,9 @@ namespace eng
 			glm::quat orientation;
 			glm::decompose(mat, scale, orientation, translation, skew, perspective);
 
-			object->SetPosition(translation);
+			/*object->SetPosition(translation);
 			object->SetRotation(orientation);
-			object->SetScale(scale);
+			object->SetScale(scale);*/
 		}
 		else //If it doesnt then it may contain one or few bits of data (may have translation, scale, or neither)
 		{
@@ -165,7 +184,7 @@ namespace eng
 			}
 		}
 
-		if (node->mesh)
+		if (node->mesh) //Checks if node is a mesh and if so gets its primatives and creates the mesh from that (only triangles)
 		{
 			for (cgltf_size primIndex = 0; primIndex < node->mesh->primitives_count; primIndex++)
 			{
@@ -286,7 +305,7 @@ namespace eng
 				}
 
 				std::shared_ptr<Mesh> mesh;
-				if (primitive.indices)
+				if (primitive.indices) //If the primitive has a indices array it goes through that too and creates our mesh using the indices constructor
 				{
 					auto indexCount = primitive.indices->count;
 					std::vector<uint32_t> indices(indexCount);
@@ -301,11 +320,53 @@ namespace eng
 					mesh = std::make_shared<Mesh>(vertexLayout, vertices);
 				}
 
+				auto mat = std::make_shared<Material>();
+				mat->SetShaderProgram(Engine::GetInstance().GetGraphicsAPI().GetDefaultShaderProgram()); //Sets material to default shader program in case primitive has none
+
+				if (primitive.material) 
+				{
+					auto gltfMat = primitive.material;
+					if (gltfMat->has_pbr_metallic_roughness) //Checks if primitive has this pbr type
+					{
+						auto pbr = gltfMat->pbr_metallic_roughness;
+						auto texture = pbr.base_color_texture.texture;
+						if (texture && texture->image) //Makes sure texture is valid and contains an image
+						{
+							if (texture->image->uri)
+							{
+								auto path = folder / std::string(texture->image->uri);
+								auto tex = Texture::Load(path.string()); //Loads texture
+								mat->SetParam("baseColourTexture", tex); //Applies texture as shader material baseColourTexture
+							}
+						}
+					}
+					else if (gltfMat->has_pbr_specular_glossiness) //Does the same as above for specular
+					{
+						auto pbr = gltfMat->pbr_specular_glossiness;
+						auto texture = pbr.diffuse_texture.texture;
+						if (texture && texture->image)
+						{
+							if (texture->image->uri)
+							{
+								auto path = folder / std::string(texture->image->uri);
+								auto tex = Texture::Load(path.string());
+								mat->SetParam("baseColourTexture", tex);
+							}
+						}
+					}
+
+					object->AddComponent(new MeshComponent(mat, mesh)); //Adds component to the overall game object
+				}
 			}
+		}
+
+		for (cgltf_size childIndex = 0; childIndex < node->children_count; childIndex++) //Loops through all children of this node and parses those nodes too
+		{
+			ParseGLTFNode(node->children[childIndex], object, folder);
 		}
 	}
 
-	GameObject* GameObject::LoadGLTF(const std::string& path)
+	GameObject* GameObject::LoadGLTF(const std::string& path) //Loads GLTF from path. Allows for GLTF scenes that contain multiple objects/meshes to be loaded as one with their hierarchy intact
 	{
 		auto contents = Engine::GetInstance().GetFileSystem().LoadAssetFileText(path);
 		if (contents.empty())
@@ -340,5 +401,9 @@ namespace eng
 			auto node = scene->nodes[i];
 			ParseGLTFNode(node, resultObject, relativeFolderPath);
 		}
+
+		cgltf_free(data);
+
+		return resultObject;
 	}
 }

@@ -9,6 +9,8 @@
 
 namespace eng
 {
+	class Scene;
+
 	class GameObject
 	{
 	public:
@@ -17,6 +19,8 @@ namespace eng
 		const std::string& GetName() const;
 		void SetName(const std::string& newName);
 		GameObject* GetParent();
+		bool SetParent(GameObject* parent);
+		Scene* GetScene();
 		bool GetIsAlive() const;
 		void MarkForDestroy();
 
@@ -58,6 +62,7 @@ namespace eng
 	private:
 		std::string name;
 		GameObject* parent = nullptr;
+		Scene* scene = nullptr;
 		std::vector<std::unique_ptr<GameObject>> children;
 		std::vector<std::unique_ptr<Component>> components;
 		bool bIsAlive = true;
