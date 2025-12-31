@@ -1,6 +1,6 @@
-prefix=C:/Users/colla/Documents/CustomGameEngine/out/install/x64-Debug
+prefix=C:/Users/colla/OneDrive/Desktop/PrivateGithub/CustomEngine/CustomGameEngine/out/install/x64-Debug
 exec_prefix=${prefix}
-libdir=C:/Users/colla/Documents/CustomGameEngine/out/install/x64-Debug/lib
+libdir=C:/Users/colla/OneDrive/Desktop/PrivateGithub/CustomEngine/CustomGameEngine/out/install/x64-Debug/lib
 includedir=${prefix}/include
 
 Name: glew
