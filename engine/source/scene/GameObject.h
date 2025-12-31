@@ -20,6 +20,7 @@ namespace eng
 		void SetName(const std::string& newName);
 		GameObject* GetParent();
 		bool SetParent(GameObject* parent);
+		GameObject* FindChildByName(const std::string& childName);
 		Scene* GetScene();
 		bool GetIsAlive() const;
 		void MarkForDestroy();

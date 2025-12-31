@@ -54,24 +54,68 @@ namespace eng
 		}
 	}
 
-	void AnimationComponent::SetClip(AnimationClip* clip)
+	void AnimationComponent::SetClip(AnimationClip* clip) //Sets our current clip, resets times, and builds our bindings
 	{
-
+		currentClip = clip;
+		time = 0.0f;
+		BuildBindings();
 	}
 
 	void AnimationComponent::RegisterClip(const std::string& name, const std::shared_ptr<AnimationClip>& clip)
 	{
-
+		clips[name] = clip;
 	}
 
 	void AnimationComponent::Play(const std::string& name, bool loop)
 	{
+		//If play is called on the clip that is currently playing it resets its
+		if (currentClip && currentClip->name == name)
+		{
+			time = 0.0f;
+			bIsPlaying = true;
+			bIsLooping = loop;
+			return;
+		}
 
+		//Switching to a registered clip
+		auto iterator = clips.find(name);
+		if (iterator != clips.end()) //Means the clip is registered
+		{
+			SetClip(iterator->second.get()); //Sets clip as the current clip
+			bIsPlaying = true;
+			bIsLooping = loop;
+		}
 	}
 
 	void AnimationComponent::BuildBindings()
 	{
+		bindings.clear(); //Clears map for new bindings
+		if (!currentClip)
+		{
+			return;
+		}
 
+		for (size_t i = 0; i < currentClip->tracks.size(); i++)
+		{
+			const auto& track = currentClip->tracks[i];
+			GameObject* target = owner->FindChildByName(track.targetName);
+
+			if (target)
+			{
+				auto iterator = bindings.find(target);
+				if (iterator != bindings.end()) //If ObjectBinding is already in the map, push back the index 
+				{
+					iterator->second->trackIndices.push_back(i);
+				}
+				else //If not, create the binding and add it to the bindings map
+				{
+					auto binding = std::make_unique<ObjectBinding>();
+					binding->object = target;
+					binding->trackIndices.push_back(i);
+					bindings.emplace(target, std::move(binding));
+				}
+			}
+		}
 	}
 
 
@@ -119,13 +163,54 @@ namespace eng
 			return glm::mix(keys[prevKey].value, keys[currKey].value, lerp); //Lerps from prev to curr using the lerp value
 		}
 
+		return keys.back().value;
+
 	}
 
-	glm::quat AnimationComponent::Interpolate(const std::vector<KeyFrameQuat>& keys, float time) const
+	glm::quat AnimationComponent::Interpolate(const std::vector<KeyFrameQuat>& keys, float time) const //Same logic as above, although uses seperate lerp method
 	{
 		if (keys.empty())
 		{
 			return glm::vec3(0.0f);
 		}
+
+		if (keys.size() == 1)
+		{
+			return keys[0].value;
+		}
+
+		if (time <= keys.front().time)
+		{
+			return keys.front().value;
+		}
+
+		if (time >= keys.back().time)
+		{
+			return keys.back().value;
+		}
+
+		size_t prevKey = 0;
+		size_t currKey = 0;
+
+		for (size_t index = 0; index < keys.size(); index++)
+		{
+			if (time <= keys[index].time)
+			{
+				currKey = index;
+				break;
+			}
+		}
+
+		prevKey = currKey > 0 ? currKey - 1 : 0;
+
+		if (time >= keys[prevKey].time && time <= keys[currKey].time)
+		{
+			float deltaTime = keys[currKey].time - keys[prevKey].time;
+			float lerp = (time - keys[prevKey].time) / deltaTime;
+
+			return glm::slerp(keys[prevKey].value, keys[currKey].value, lerp); //Same as the mix method for vec3 but allows lerping of quats
+		}
+
+		return keys.back().value;
 	}
 }

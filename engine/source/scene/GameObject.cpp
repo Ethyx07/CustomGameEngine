@@ -61,6 +61,22 @@ namespace eng
 		return scene->SetParent(this, parent);
 	}
 
+	GameObject* GameObject::FindChildByName(const std::string& childName) //Recursive function that checks all children of the initial gameobject
+	{
+		if (name == childName) //Returns this if the childname is this object
+		{
+			return this;
+		}
+		for (auto& child : children) //Checks the children of this object until it finds the name or checks all children
+		{
+			if (auto result = child->FindChildByName(childName))
+			{
+				return result;
+			}
+		}
+		return nullptr;
+	}
+
 	Scene* GameObject::GetScene()
 	{
 		return scene;

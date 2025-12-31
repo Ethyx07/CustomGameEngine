@@ -24,7 +24,7 @@ namespace eng
 
 	struct TransformTrack //Stores an object name and collection of keyframe structs. This is like a track in other animation systems
 	{
-		std::string name; //Name of the gameobject
+		std::string targetName; //Name of the gameobject
 		std::vector<KeyFrameVec3> positionKeys; //position keyframes
 		std::vector<KeyFrameQuat> rotationKeys; //Rotation keyframes
 		std::vector<KeyFrameVec3> scaleKeys; //Scale keyframes
