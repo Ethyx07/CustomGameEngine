@@ -14,6 +14,8 @@ private:
 	eng::GameObject* cameraOne = nullptr;
 	eng::GameObject* cameraTwo = nullptr;
 
+	eng::GameObject* gunObj = nullptr;
+
 	bool bCameraOne = true;
 	bool bCooldown = false;
 

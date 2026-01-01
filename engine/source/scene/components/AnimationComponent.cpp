@@ -87,7 +87,7 @@ namespace eng
 		}
 	}
 
-	void AnimationComponent::BuildBindings()
+	void AnimationComponent::BuildBindings() //Creates binding between the tracks and the gameobject it impacts
 	{
 		bindings.clear(); //Clears map for new bindings
 		if (!currentClip)

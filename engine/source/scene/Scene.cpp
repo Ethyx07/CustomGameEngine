@@ -124,7 +124,7 @@ namespace eng
 				if (it == objects.end()) //Means that the object has just been created
 				{
 					std::unique_ptr<GameObject> objHolder(obj);
-					objects.push_back(std::move(objHolder));
+					parent->children.push_back(std::move(objHolder));
 					obj->parent = parent; 
 					result = true;
 				}

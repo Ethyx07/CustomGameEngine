@@ -50,11 +50,22 @@ bool Game::Init()
 	auto suzanneObj = eng::GameObject::LoadGLTF("models/suzanne/Suzanne.gltf");
 	suzanneObj->SetPosition(glm::vec3(0.0f, 0.0f, -5.0f));
 
-	auto gunObj = eng::GameObject::LoadGLTF("models/weapons/scene.gltf");
+	gunObj = eng::GameObject::LoadGLTF("models/weapons/scene.gltf");
 	gunObj->SetParent(cameraOne);
 	gunObj->SetPosition(glm::vec3(0.75f, -0.5f, -0.75f));
 	gunObj->SetScale(glm::vec3(-1.0f, 1.0f, 1.0f));
 
+	if (auto bullet = gunObj->FindChildByName("bullet_33"))
+	{
+		bullet->SetActive(false);
+	}
+	if (auto fire = gunObj->FindChildByName("BOOM_35"))
+	{
+		fire->SetActive(false);
+	}
+
+	
+	
     auto light = scene->CreateObject("Light");
     auto lightComp = new eng::LightComponent();
     lightComp->SetColour(glm::vec3(1.0f));
@@ -110,6 +121,15 @@ void Game::Update(float deltaTime)
 				cameraTwo->GetComponent<eng::PlayerControllerComponent>()->SetIsActive(false);
 			}
 			bCooldown = true;
+		}
+		if (inputManager.isKeyPressed(GLFW_KEY_M))
+		{
+			if (auto anim = gunObj->GetComponent<eng::AnimationComponent>())
+			{
+
+				anim->Play("shoot", false);
+			}
+
 		}
 	}
 	

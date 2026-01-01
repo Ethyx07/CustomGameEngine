@@ -25,6 +25,9 @@ namespace eng
 		bool GetIsAlive() const;
 		void MarkForDestroy();
 
+		bool IsActive();
+		void SetActive(bool active);
+
 		void AddComponent(Component* component);
 		template<typename T, typename = typename std::enable_if_t<std::is_base_of_v<Component, T>>>
 		T* GetComponent()
@@ -70,6 +73,8 @@ namespace eng
 		glm::vec3 position = glm::vec3(0.0f);
 		glm::quat rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
 		glm::vec3 scale = glm::vec3(1.0f);
+
+		bool bActive = true;
 
 
 		friend class Scene;

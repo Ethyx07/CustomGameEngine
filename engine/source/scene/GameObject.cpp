@@ -5,6 +5,9 @@
 #include "render/Material.h"
 #include "render/Mesh.h"
 #include "scene/components/MeshComponent.h"
+#include "components/AnimationComponent.h"
+
+
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -14,10 +17,16 @@
 #define CGLTF_IMPLEMENTATION
 #include <cgltf.h>
 
+
 namespace eng
 {
 	void GameObject::Update(float deltaTime)
 	{
+		if (!bActive)
+		{
+			return;
+		}
+
 		for (auto& component : components)
 		{
 			component->Update(deltaTime);
@@ -59,6 +68,16 @@ namespace eng
 		}
 
 		return scene->SetParent(this, parent);
+	}
+
+	bool GameObject::IsActive()
+	{
+		return bActive;
+	}
+
+	void GameObject::SetActive(bool active)
+	{
+		bActive = active;
 	}
 
 	GameObject* GameObject::FindChildByName(const std::string& childName) //Recursive function that checks all children of the initial gameobject
@@ -382,6 +401,57 @@ namespace eng
 		}
 	}
 
+
+	static float ReadScalar(const cgltf_accessor* acc, cgltf_size index)
+	{
+		float result = 0.0f;
+		cgltf_accessor_read_float(acc, index, &result, 1);
+		return result;
+	}
+
+	static glm::vec3 ReadVec3(const cgltf_accessor* acc, cgltf_size index)
+	{
+		glm::vec3 result;
+		cgltf_accessor_read_float(acc, index, glm::value_ptr(result), 3);
+		return result;
+	}
+
+	static glm::quat ReadQuat(const cgltf_accessor* acc, cgltf_size index)
+	{
+		float temp[4] = { 0,0,0,1 }; //x, y, z, w
+		cgltf_accessor_read_float(acc, index, temp, 4);
+		//glm quats are w, x, y, z but temp[4] is x, y, z, w
+		return glm::quat(temp[3], temp[0], temp[1], temp[2]);
+
+	}
+
+	static void ReadTimes(const cgltf_accessor* acc, std::vector<float>& outTimes)
+	{
+		outTimes.resize(acc->count);
+		for (cgltf_size i = 0; i < acc->count; i++)
+		{
+			outTimes[i] = ReadScalar(acc, i); 
+		}
+	}
+
+	static void ReadOutputVec3(const cgltf_accessor* acc, std::vector<glm::vec3>& outValues)
+	{
+		outValues.resize(acc->count);
+		for (cgltf_size i = 0; i < acc->count; i++)
+		{
+			outValues[i] = ReadVec3(acc, i); 
+		}
+	}
+
+	static void ReadOutputQuat(const cgltf_accessor* acc, std::vector<glm::quat>& outValues)
+	{
+		outValues.resize(acc->count);
+		for (cgltf_size i = 0; i < acc->count; i++)
+		{
+			outValues[i] = ReadQuat(acc, i); 
+		}
+	}
+
 	GameObject* GameObject::LoadGLTF(const std::string& path) //Loads GLTF from path. Allows for GLTF scenes that contain multiple objects/meshes to be loaded as one with their hierarchy intact
 	{
 		auto contents = Engine::GetInstance().GetFileSystem().LoadAssetFileText(path);
@@ -416,6 +486,113 @@ namespace eng
 		{
 			auto node = scene->nodes[i];
 			ParseGLTFNode(node, resultObject, relativeFolderPath);
+		}
+
+		std::vector<std::shared_ptr<AnimationClip>> clips; //Collection of clips/animations within the gltf data
+		for (cgltf_size animIndex = 0; animIndex < data->animations_count; animIndex++)
+		{
+			auto& animation = data->animations[animIndex];
+
+			auto clip = std::make_shared<AnimationClip>(); //Creates a clip to pass the gltf data into
+			clip->name = animation.name ? animation.name : "noname"; //Sets anim name to the clips name if one is found
+			clip->duration = 0.0f;
+
+			std::unordered_map<cgltf_node*, size_t> trackIndexOf;
+
+			auto GetOrCreateTrack = [&](cgltf_node* node) -> TransformTrack&
+				{
+					auto iterator = trackIndexOf.find(node); //Checks if the track is already stored/created
+					if (iterator != trackIndexOf.end())
+					{
+						return clip->tracks[iterator->second];
+					}
+
+					TransformTrack track;
+					track.targetName = node && node->name ? node->name : std::string{}; //If node and node name are valid then sets target to node name
+					clip->tracks.push_back(track);
+					size_t idx = clip->tracks.size() - 1;
+					trackIndexOf[node] = idx; //Sets the nodes index value to align with the tracks index in the track vector
+					return clip->tracks[idx];
+				};
+
+			for (cgltf_size clipIndex = 0; clipIndex < animation.channels_count; clipIndex++) //Loops through all channels of this clip/anmation
+			{
+				auto& channel = animation.channels[clipIndex]; //Gets the current channel
+				auto sampler = channel.sampler; //Gets the sampler specific to that channel
+
+				if (!channel.target_node || !sampler || !sampler->input || !sampler->output) //If any of these are invalid, skip to next index in loop
+				{
+					continue;
+				}
+
+				std::vector<float> times;
+				ReadTimes(sampler->input, times); //Takes the sampler input as its accessor and the times vector as its outValues
+
+				if (times.empty()) //If no time values read, skip to next index
+				{
+					continue;
+				}
+
+				auto& track = GetOrCreateTrack(channel.target_node); //Returns the track from this channel using the target node
+
+				switch (channel.target_path) //The type of animation/change
+				{
+				case cgltf_animation_path_type_translation:
+				{
+					std::vector<glm::vec3> values;
+					ReadOutputVec3(sampler->output, values); //Passes sampler output as accessor
+					track.positionKeys.resize(times.size()); //Resizes to match the size of the times vector as each time should have a corresponding key
+					for (size_t i = 0; i < times.size(); i++)
+                    {
+                        track.positionKeys[i].time = times[i];
+                        track.positionKeys[i].value = values[i];
+                    }
+				}
+				break;
+
+				case cgltf_animation_path_type_scale:
+				{
+					std::vector<glm::vec3> values;
+					ReadOutputVec3(sampler->output, values); //Passes sampler output as accessor
+					track.scaleKeys.resize(times.size()); //Resizes to match the size of the times vector as each time should have a corresponding key
+					for (size_t i = 0; i < times.size(); i++)
+					{
+						track.scaleKeys[i].time = times[i];
+						track.scaleKeys[i].value = values[i];
+					}
+				}
+				break;
+
+				case cgltf_animation_path_type_rotation:
+				{
+					std::vector<glm::quat> values;
+					ReadOutputQuat(sampler->output, values); //Passes sampler output as accessor
+					track.rotationKeys.resize(times.size()); //Resizes to match the size of the times vector as each time should have a corresponding key
+					for (size_t i = 0; i < times.size(); i++)
+					{
+						track.rotationKeys[i].time = times[i];
+						track.rotationKeys[i].value = values[i];
+					}
+				}
+				break;
+				default:
+					break;
+				}
+
+				clip->duration = std::max(clip->duration, times.back()); //Gets the max value between our clip->duration and the last time value
+			}
+
+			clips.push_back(clip);
+		}
+
+		if (!clips.empty()) //If clip data had been found and stored
+		{
+			auto animComp = new AnimationComponent(); //Adds animation component to object and registers its clips to it
+			resultObject->AddComponent(animComp);
+			for (auto& clip : clips)
+			{
+				animComp->RegisterClip(clip->name, clip);
+			}
 		}
 
 		cgltf_free(data);
