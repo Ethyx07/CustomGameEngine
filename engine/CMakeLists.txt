@@ -50,6 +50,13 @@ set(PROJECT_SOURCE_FILES
 	source/scene/components/PlayerControllerComponent.cpp
 	source/io/FileSystem.h
 	source/io/FileSystem.cpp
+	source/physics/PhysicsManager.h
+	source/physics/PhysicsManager.cpp
+	source/physics/Collider.h
+	source/physics/Collider.cpp
+	source/physics/RigidBody.h
+	source/physics/RigidBody.cpp
+	source/Common.h
 
 )
 
@@ -77,12 +84,23 @@ include_directories(thirdparty/cgltf)
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_BINARY_DIR})
 
+# Physics Libray
+option(BUILD_UNIT_TESTS OFF)
+option(BUILD_BULLET2_DEMOS OFF)
+option(BUILD_EXTRAS OFF)
+option(BUILD_SHARED_LIBS OFF)
+add_subdirectory(thirdparty/bullet3-3.25)
+target_include_directories(${PROJECT_NAME} PRIVATE thirdparty/bullet3-3.25/src)
+
 
 # Link all thirdparty libraries
 target_link_libraries(${PROJECT_NAME} 
     glfw 
     glew_s
 	glm
+	LinearMath
+	BulletCollision
+	BulletDynamics
 )
 #Copies assets directory
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD

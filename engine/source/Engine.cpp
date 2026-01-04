@@ -87,6 +87,7 @@ namespace eng
 			return false;
 		}
 		graphicsAPI.Init();
+		physicsManager.Init();
 		return application->Init();
 	}
 
@@ -106,6 +107,7 @@ namespace eng
 			float deltaTime = std::chrono::duration<float>(now - lastTimePoint).count(); //Finds difference between current and past to get our delta time
 			lastTimePoint = now; //Updates last time point to be the current one
 
+			physicsManager.Update(deltaTime); //Updates physics within the engine loop
 			application->Update(deltaTime); //Calls update function for the application
 
 			graphicsAPI.SetClearColour(1.0f, 1.0f, 1.0f, 1.0f);
@@ -188,6 +190,11 @@ namespace eng
 	TextureManager& Engine::GetTextureManager()
 	{
 		return textureManager;
+	}
+
+	PhysicsManager& Engine::GetPhysicsManager()
+	{
+		return physicsManager;
 	}
 
 	void Engine::SetScene(Scene* scene)
