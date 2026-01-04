@@ -30,7 +30,7 @@ bool Game::Init()
     auto material = eng::Material::Load("materials/brick.mat");
 
 
-	auto mesh = eng::Mesh::CreateCube();
+	auto mesh = eng::Mesh::CreateBox();
 
     auto objectA = scene->CreateObject("ObjectA");
     objectA->AddComponent(new eng::MeshComponent(material, mesh));
@@ -64,6 +64,28 @@ bool Game::Init()
 		fire->SetActive(false);
 	}
 
+	auto ground = scene->CreateObject("ground");
+	ground->SetPosition(glm::vec3(0, -5, 0));
+	glm::vec3 groundExtents(20, 2, 20);
+	auto groundMesh = eng::Mesh::CreateBox(groundExtents);
+	ground->AddComponent(new eng::MeshComponent(material, groundMesh));
+
+	auto groundCollider = std::make_shared<eng::BoxCollider>(groundExtents);
+	auto groundBody = std::make_shared<eng::RigidBody>(eng::BodyType::Static, groundCollider, 0.0f, 0.5f);
+
+	ground->AddComponent(new eng::PhysicsComponent(groundBody));
+
+	auto boxObj = scene->CreateObject("fallingBox");
+	boxObj->AddComponent(new eng::MeshComponent(material, mesh));
+
+	boxObj->SetPosition(glm::vec3(0, 2, 2));
+	boxObj->SetRotation(glm::quat(glm::vec3(1, 2, 0)));
+
+	auto boxCollider = std::make_shared<eng::BoxCollider>(glm::vec3(1));
+	auto boxBody = std::make_shared<eng::RigidBody>(eng::BodyType::Dynamic, boxCollider, 5.0f, 0.5f);
+
+	boxObj->AddComponent(new eng::PhysicsComponent(boxBody));
+
 	
 	
     auto light = scene->CreateObject("Light");
@@ -72,7 +94,7 @@ bool Game::Init()
     light->AddComponent(lightComp);
     light->SetPosition(glm::vec3(0.0f, 0.0f, 5.0f));
 
-
+	cameraOne->SetPosition(glm::vec3(0.0f, 1.0f, 7.0f));
     
 
     return true;

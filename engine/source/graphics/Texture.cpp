@@ -58,7 +58,7 @@ namespace eng
 
 		if (!std::filesystem::exists(fullPath))
 		{
-			nullptr;
+			return nullptr;
 		}
 
 		std::shared_ptr<Texture> result;
@@ -68,8 +68,10 @@ namespace eng
 		{
 			result = std::make_shared<Texture>(width, height, numChannels, data);
 			stbi_image_free(data);
-			return result;
+			
 		}
+
+		return result;
 	}
 
 	std::shared_ptr<Texture> TextureManager::GetOrLoadTexture(const std::string& path) //Checks if texture manager has texture loaded already (path is key)

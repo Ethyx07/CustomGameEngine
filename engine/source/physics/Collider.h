@@ -17,7 +17,7 @@ namespace eng
 
 	};
 
-	class BoxCollider : Collider
+	class BoxCollider : public Collider
 	{
 	public:
 
@@ -25,7 +25,7 @@ namespace eng
 
 	};
 
-	class SphereCollider : Collider
+	class SphereCollider : public Collider
 	{
 	public:
 
@@ -33,7 +33,7 @@ namespace eng
 
 	};
 
-	class CapsuleCollider : Collider
+	class CapsuleCollider : public Collider
 	{
 	public:
 
