@@ -115,6 +115,7 @@ namespace eng
 	{
 		components.emplace_back(component);
 		component->owner = this;
+		component->Init(); //If component uses the init function (physics) runs its initialisation logic
 	}
 
 	const glm::vec3& GameObject::GetPosition() const

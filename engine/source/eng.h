@@ -18,6 +18,7 @@
 #include "scene/components/LightComponent.h"
 #include "scene/components/AnimationComponent.h"
 #include "scene/components/PlayerControllerComponent.h"
+#include "scene/components/PhysicsComponent.h"
 #include "io/FileSystem.h"
 #include "physics/PhysicsManager.h"
 #include "physics/Collider.h"

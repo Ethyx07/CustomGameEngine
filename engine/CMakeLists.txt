@@ -48,6 +48,8 @@ set(PROJECT_SOURCE_FILES
 	source/scene/components/AnimationComponent.cpp
 	source/scene/components/PlayerControllerComponent.h
 	source/scene/components/PlayerControllerComponent.cpp
+	source/scene/components/PhysicsComponent.h
+	source/scene/components/PhysicsComponent.cpp
 	source/io/FileSystem.h
 	source/io/FileSystem.cpp
 	source/physics/PhysicsManager.h
