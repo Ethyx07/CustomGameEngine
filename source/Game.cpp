@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "TestObject.h"
 #include "TestObjectOrbit.h"
+#include "Player.h"
 #include "GLFW/glfw3.h"
 #include <string>
 #include <iostream>
@@ -16,17 +17,15 @@ bool Game::Init()
     scene = new eng::Scene();
 	eng::Engine::GetInstance().SetScene(scene);
 
-    cameraOne = scene->CreateObject("CameraOne");
-    cameraOne->AddComponent(new eng::CameraComponent());
-    cameraOne->SetPosition(glm::vec3(0.0f, 0.0f, 2.0f));
-    cameraOne->AddComponent(new eng::PlayerControllerComponent());
+	auto player = scene->CreateObject<Player>("Player");
+	player->Init();
+	scene->SetMainCamera(player);
 
     cameraTwo = scene->CreateObject("CameraTwo");
     cameraTwo->AddComponent(new eng::CameraComponent());
     cameraTwo->SetPosition(glm::vec3(-20.0f, 0.0f, 2.0f));
     cameraTwo->AddComponent(new eng::PlayerControllerComponent());
 
-    scene->SetMainCamera(cameraOne);
     auto material = eng::Material::Load("materials/brick.mat");
 
 
@@ -94,7 +93,6 @@ bool Game::Init()
     light->AddComponent(lightComp);
     light->SetPosition(glm::vec3(0.0f, 0.0f, 5.0f));
 
-	cameraOne->SetPosition(glm::vec3(0.0f, 1.0f, 7.0f));
     
 
     return true;

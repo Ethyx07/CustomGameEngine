@@ -7,6 +7,12 @@
 
 namespace eng
 {
+
+	void PlayerControllerComponent::Init()
+	{
+		kinematicController = std::make_unique<KinematicCharacterController>(0.4f, 1.2f);
+	}
+
 	void PlayerControllerComponent::Update(float deltaTime)
 	{
 		if (!GetIsActive()) 
@@ -45,34 +51,40 @@ namespace eng
 		glm::vec3 forwardVector = rotation * glm::vec3(0.0f, 0.0f, -1.0f); //Gets the normalised direction of our forward vector
 		glm::vec3 rightVector = rotation * glm::vec3(1.0f, 0.0f, 0.0f); //Gets the normalised direction of our right vector
 
-		auto position = owner->GetPosition();
-		if (inputManager.isKeyPressed(GLFW_KEY_SPACE))
-		{
-			moveSpeed = 10.0f;
-		}
-		else
-		{
-			moveSpeed = 2.0f;
-		}
+		glm::vec3 move(0.0f);
+		
 		//Left/Right Movement
 		if (inputManager.isKeyPressed(GLFW_KEY_A))
 		{
-			position -= rightVector * moveSpeed * deltaTime;
+			move -= rightVector;
 		}
-		if (inputManager.isKeyPressed(GLFW_KEY_D)) {
-			position += rightVector * moveSpeed * deltaTime;
+		if (inputManager.isKeyPressed(GLFW_KEY_D))
+		{
+			move += rightVector;
 		}
 		//Forward/Backward Movement
 		if (inputManager.isKeyPressed(GLFW_KEY_W))
 		{
-			position += forwardVector * moveSpeed * deltaTime;
+			move += forwardVector;
 		}
-		if (inputManager.isKeyPressed(GLFW_KEY_S)) {
-			position -= forwardVector * moveSpeed * deltaTime;
+		if (inputManager.isKeyPressed(GLFW_KEY_S)) 
+		{
+			move -= forwardVector;
 		}
 
+		//Jump Controller
+		if (inputManager.isKeyPressed(GLFW_KEY_SPACE))
+		{
+			kinematicController->Jump(glm::vec3(0.0f, 5.0f, 0.0f));
+		}
 
-		owner->SetPosition(position);
+		if (glm::dot(move, move) > 0)
+		{
+			move = glm::normalize(move);
+		}
+
+		kinematicController->Walk(move * moveSpeed * deltaTime);
+		owner->SetPosition(kinematicController->GetPosition());
 	}
 
 	void PlayerControllerComponent::SetIsActive(bool bActive)

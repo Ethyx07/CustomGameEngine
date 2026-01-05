@@ -213,4 +213,9 @@ namespace eng
 
 		return keys.back().value;
 	}
+
+	bool AnimationComponent::IsPlaying() const
+	{
+		return bIsPlaying;
+	}
 }

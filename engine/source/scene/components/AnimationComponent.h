@@ -54,6 +54,8 @@ namespace eng
 		void RegisterClip(const std::string& name, const std::shared_ptr<AnimationClip>& clip);
 		void Play(const std::string& name, bool loop = false); //Defaults looping to false
 
+		bool IsPlaying() const;
+
 	private:
 		//Current playback state
 		AnimationClip* currentClip = nullptr;
