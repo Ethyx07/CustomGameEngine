@@ -59,4 +59,14 @@ namespace eng
 	{
 		return currentMousePosition;
 	}
+
+	void InputManager::SetMousePositionChanged(bool changed)
+	{
+		bMousePositionChanged = changed;
+	}
+
+	bool InputManager::IsMousePositionChanged() const
+	{
+		return bMousePositionChanged;
+	}
 }

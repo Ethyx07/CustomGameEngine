@@ -27,12 +27,17 @@ namespace eng
 		void SetCurrentMousePosition(glm::vec2 pos);
 		const glm::vec2 GetCurrentMousePosition() const;
 
+		void SetMousePositionChanged(bool changed);
+		bool IsMousePositionChanged() const;
+
 
 	private:
 		std::array<bool, 256> keys = { false };
 		std::array<bool, 16> mouseKeys = { false };
 		glm::vec2 oldMousePosition = glm::vec2(0.0f, 0.0f);
 		glm::vec2 currentMousePosition = glm::vec2(0.0f, 0.0f);
+
+		bool bMousePositionChanged = false;
 
 		friend class Engine; //Lets engine access private functions/values
 

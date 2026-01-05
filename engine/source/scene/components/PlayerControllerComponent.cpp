@@ -16,7 +16,7 @@ namespace eng
 		auto& inputManager = Engine::GetInstance().GetInputManager();
 		auto rotation = owner->GetRotation();
 
-		if (inputManager.isMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
+		if (inputManager.IsMousePositionChanged())
 		{
 			//Gets current pos and old pos to find the difference and sets the x y difference as delta X and delta Y. Used to determine how fast camera moves and its rotation
 			const auto& oldPos = inputManager.GetOldMousePosition();
@@ -27,18 +27,17 @@ namespace eng
 
 
 			//Rotation around y axis
-			float yAngle = -deltaX * sensitivity * deltaTime;
-			glm::quat yRot = glm::angleAxis(yAngle, glm::vec3(0.0f, 1.0f, 0.0f));
-			//rotation.y -= deltaX * sensitivity * deltaTime;
+			float yDeltaAngle = -deltaX * sensitivity * deltaTime;
+			curYRot += yDeltaAngle;
+			glm::quat yRot = glm::angleAxis(glm::radians(curYRot), glm::vec3(0.0f, 1.0f, 0.0f));
 
 			//Rotation around x axis
-			float xAngle = -deltaY * sensitivity * deltaTime;
-			glm::vec3 rightVector = rotation * glm::vec3(1.0f, 0.0f, 0.0f);
-			glm::quat xRot = glm::angleAxis(xAngle, rightVector);
+			float xDeltaAngle = -deltaY * sensitivity * deltaTime;
+			curXRot += xDeltaAngle;
+			curXRot = std::clamp(curXRot, -89.0f, 89.0f);
+			glm::quat xRot = glm::angleAxis(glm::radians(curXRot), glm::vec3(1.0f,0.0f,0.0f));
 
-			glm::quat deltaRotation = yRot * xRot;
-			rotation = glm::normalize(deltaRotation * rotation);
-			//rotation.x -= deltaY * sensitivity * deltaTime;
+			rotation = glm::normalize(yRot * xRot);
 
 			owner->SetRotation(rotation);
 		}

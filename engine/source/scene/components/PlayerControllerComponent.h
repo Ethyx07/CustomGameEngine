@@ -12,9 +12,12 @@ namespace eng
 		bool GetIsActive();
 
 	private:
-		float sensitivity = 1.5f;
+		float sensitivity = 10.0f;
 		float moveSpeed = 2.0f;
 		bool bIsActive = true;
+
+		float curXRot = 0.0f;
+		float curYRot = 0.0f;
 
 	};
 }

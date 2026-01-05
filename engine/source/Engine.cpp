@@ -43,6 +43,7 @@ namespace eng
 
 		glm::vec2 currentPos(static_cast<float>(xpos), static_cast<float>(ypos));
 		inputManager.SetCurrentMousePosition(currentPos);
+		inputManager.SetMousePositionChanged(true);
 	}
 
 	Engine& Engine::GetInstance() //Globally accessible engine
@@ -79,6 +80,7 @@ namespace eng
 		glfwSetMouseButtonCallback(window, mouseButtonCallback);
 		glfwSetCursorPosCallback(window, cursorPositionCallback); //Sets the callbacks for the mouse input and position for look action
 
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); //Disables OS cursor and locks cursor to window
 		glfwMakeContextCurrent(window); //Sets window as glfw current context
 
 		if (glewInit() != GLEW_OK)  //Checks if glew was initialised properly
@@ -142,6 +144,7 @@ namespace eng
 			glfwSwapBuffers(window);
 
 			inputManager.SetOldMousePosition(inputManager.GetCurrentMousePosition());
+			inputManager.SetMousePositionChanged(false); //Resets value to false each frame
 		}
 	}
 
