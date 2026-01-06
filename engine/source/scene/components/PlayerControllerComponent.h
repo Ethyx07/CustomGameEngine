@@ -18,7 +18,7 @@ namespace eng
 
 	private:
 		float sensitivity = 10.0f;
-		float moveSpeed = 2.0f;
+		float moveSpeed = 10.0f;
 		bool bIsActive = true;
 
 		float curXRot = 0.0f;

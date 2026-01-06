@@ -21,13 +21,7 @@ bool Game::Init()
 	player->Init();
 	scene->SetMainCamera(player);
 
-    cameraTwo = scene->CreateObject("CameraTwo");
-    cameraTwo->AddComponent(new eng::CameraComponent());
-    cameraTwo->SetPosition(glm::vec3(-20.0f, 0.0f, 2.0f));
-    cameraTwo->AddComponent(new eng::PlayerControllerComponent());
-
     auto material = eng::Material::Load("materials/brick.mat");
-
 
 	auto mesh = eng::Mesh::CreateBox();
 
@@ -48,20 +42,6 @@ bool Game::Init()
 
 	auto suzanneObj = eng::GameObject::LoadGLTF("models/suzanne/Suzanne.gltf");
 	suzanneObj->SetPosition(glm::vec3(0.0f, 0.0f, -5.0f));
-
-	gunObj = eng::GameObject::LoadGLTF("models/weapons/scene.gltf");
-	gunObj->SetParent(cameraOne);
-	gunObj->SetPosition(glm::vec3(0.75f, -0.5f, -0.75f));
-	gunObj->SetScale(glm::vec3(-1.0f, 1.0f, 1.0f));
-
-	if (auto bullet = gunObj->FindChildByName("bullet_33"))
-	{
-		bullet->SetActive(false);
-	}
-	if (auto fire = gunObj->FindChildByName("BOOM_35"))
-	{
-		fire->SetActive(false);
-	}
 
 	auto ground = scene->CreateObject("ground");
 	ground->SetPosition(glm::vec3(0, -5, 0));
@@ -86,7 +66,6 @@ bool Game::Init()
 	boxObj->AddComponent(new eng::PhysicsComponent(boxBody));
 
 	
-	
     auto light = scene->CreateObject("Light");
     auto lightComp = new eng::LightComponent();
     lightComp->SetColour(glm::vec3(1.0f));
@@ -110,49 +89,6 @@ void Game::Update(float deltaTime)
 		fpsCounter = 0;
 		timeSinceLastSecond = 0;
 	}
-
-	auto& inputManager = eng::Engine::GetInstance().GetInputManager();
-	if (bCooldown)
-	{
-		currentCooldownTimer += deltaTime;
-		if (currentCooldownTimer >= cooldownTimer)
-		{
-			bCooldown = false;
-			currentCooldownTimer = 0.0f;
-		}
-		
-	}
-	else
-	{
-		if (inputManager.isKeyPressed(GLFW_KEY_P))
-		{
-			if (bCameraOne)
-			{
-				scene->SetMainCamera(cameraTwo);
-				bCameraOne = false;
-				cameraOne->GetComponent<eng::PlayerControllerComponent>()->SetIsActive(false);
-				cameraTwo->GetComponent<eng::PlayerControllerComponent>()->SetIsActive(true);
-			}
-			else
-			{
-				scene->SetMainCamera(cameraOne);
-				bCameraOne = true;
-				cameraOne->GetComponent<eng::PlayerControllerComponent>()->SetIsActive(true);
-				cameraTwo->GetComponent<eng::PlayerControllerComponent>()->SetIsActive(false);
-			}
-			bCooldown = true;
-		}
-		if (inputManager.isKeyPressed(GLFW_KEY_M))
-		{
-			if (auto anim = gunObj->GetComponent<eng::AnimationComponent>())
-			{
-
-				anim->Play("shoot", false);
-			}
-
-		}
-	}
-	
 }
 
 void Game::Destroy()

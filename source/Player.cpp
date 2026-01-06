@@ -26,7 +26,6 @@ void Player::Init()
 			fire->SetActive(false);
 		}
 
-		anim->Play("shoot", false);
 	}
 
 	animationComponent = gun->GetComponent<eng::AnimationComponent>();
