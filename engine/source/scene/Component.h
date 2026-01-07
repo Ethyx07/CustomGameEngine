@@ -1,7 +1,7 @@
 #pragma once
 
 #include "nlohmann/json.hpp"
-
+#include <cstddef>
 #include <string>
 #include <memory>
 
@@ -55,11 +55,7 @@ namespace eng
 	class ComponentFactory //Component Factory singleton
 	{
 	public:
-		static ComponentFactory& GetInstance()
-		{
-			static ComponentFactory instance;
-			return instance;
-		}
+		static ComponentFactory& GetInstance();
 
 		template <typename T>
 		void RegisterComponent(const std::string& name) //Registers the creator

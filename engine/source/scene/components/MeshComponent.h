@@ -15,6 +15,8 @@ namespace eng
 		MeshComponent(const std::shared_ptr<Material>& mat, const std::shared_ptr<Mesh>& compMesh);
 		void Update(float deltaTime) override;
 
+		void LoadProperties(const nlohmann::json& json) override;
+
 		void SetMaterial(const std::shared_ptr<Material>& mat);
 		void SetMesh(const std::shared_ptr<Mesh>& newMesh);
 

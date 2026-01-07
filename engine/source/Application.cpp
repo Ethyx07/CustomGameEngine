@@ -3,6 +3,10 @@
 
 namespace eng
 {
+	void Application::RegisterTypes()
+	{
+	}
+
 	void Application::SetNeedsToClose(bool value)
 	{
 		bNeedsToBeClosed = true;

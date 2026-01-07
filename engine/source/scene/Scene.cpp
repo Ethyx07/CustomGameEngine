@@ -1,10 +1,25 @@
 #include "scene/Scene.h"
+#include "scene/components/AnimationComponent.h"
+#include "scene/components/CameraComponent.h"
 #include "scene/components/LightComponent.h"
+#include "scene/components/MeshComponent.h"
+#include "scene/components/PhysicsComponent.h"
+#include "scene/components/PlayerControllerComponent.h"
 #include "Engine.h"
 
 
 namespace eng
 {
+	void Scene::RegisterTypes() //Registers all engine component types
+	{
+		AnimationComponent::Register();
+		CameraComponent::Register();
+		LightComponent::Register();
+		MeshComponent::Register();
+		PhysicsComponent::Register();
+		PlayerControllerComponent::Register();
+	}
+
 	void Scene::Update(float deltaTime)
 	{
 		for (auto iterator = objects.begin(); iterator != objects.end();) //Loops through vector of gameobject children
@@ -232,7 +247,15 @@ namespace eng
 
 		if (objectJSON.contains("type"))
 		{
-			//For creating object of custom type
+			std::string type = objectJSON.value("type", "");
+			if (type == "gltf") //GLTF objects are here
+			{
+				//GLTF BRANCH
+			}
+			else //User defined objects are loaded here
+			{
+
+			}
 		}
 		else
 		{
@@ -278,16 +301,33 @@ namespace eng
 			gameObject->SetScale(scale);
 		}
 
+		gameObject->LoadProperties(objectJSON); //Loads properties for custom gameobjects
+
 		if (objectJSON.contains("components") && objectJSON["components"].is_array())
 		{
 			const auto& compData = objectJSON["components"];
 
-			for (const auto& component : compData)
+			for (const auto& componentJSON : compData)
 			{
-				const std::string compType = component.value("type", ""); //Gets the component type based on its value
-
+				const std::string compType = componentJSON.value("type", ""); //Gets the component type based on its value
+				Component* component = ComponentFactory::GetInstance().CreateComponent(compType);
+				if (component) //Ensures comptype is valid as otherwise component would be nullptr
+				{
+					component->LoadProperties(componentJSON);
+					gameObject->AddComponent(component);
+				}
 			}
 		}
+
+		if (objectJSON.contains("children") && objectJSON["children"].is_array())
+		{
+			for (const auto& childJSON : objectJSON["children"])
+			{
+				LoadObject(childJSON, gameObject); //recursive
+			}
+		}
+
+		gameObject->Init(); //Finally calls gameobjects initialisation function
 	}
 
 }

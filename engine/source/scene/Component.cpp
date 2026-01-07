@@ -16,4 +16,10 @@ namespace eng
 	{
 		return owner;
 	}
+
+	ComponentFactory& ComponentFactory::GetInstance()
+	{
+		static ComponentFactory instance;
+		return instance;
+	}
 }

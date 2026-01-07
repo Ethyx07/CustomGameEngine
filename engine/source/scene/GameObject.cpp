@@ -20,6 +20,14 @@
 
 namespace eng
 {
+	void GameObject::LoadProperties(const nlohmann::json& json)
+	{
+	}
+
+	void GameObject::Init()
+	{
+	}
+
 	void GameObject::Update(float deltaTime)
 	{
 		if (!bActive)

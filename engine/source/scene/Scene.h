@@ -11,6 +11,7 @@ namespace eng
 	class Scene
 	{
 	public:
+        static void RegisterTypes();
         void Update(float deltaTime);
         void Clear();
 

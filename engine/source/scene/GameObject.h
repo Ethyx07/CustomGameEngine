@@ -16,6 +16,8 @@ namespace eng
 	public:
 		virtual ~GameObject() = default;
 		virtual void Update(float deltaTime);
+		virtual void LoadProperties(const nlohmann::json& json);
+		virtual void Init();
 		const std::string& GetName() const;
 		void SetName(const std::string& newName);
 		GameObject* GetParent();

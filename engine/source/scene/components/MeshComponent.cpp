@@ -12,7 +12,38 @@ namespace eng
 	{
 
 	}
-	
+
+	void MeshComponent::LoadProperties(const nlohmann::json& json)
+	{
+		//Material Loading
+		if (json.contains("material"))
+		{
+			const std::string matPath = json.value("material", "");
+			auto material = Material::Load(matPath);
+			if (material)
+			{
+				SetMaterial(material);
+			}
+		}
+
+		//Mesh Loading
+		if (json.contains("mesh"))
+		{
+			const auto& meshData = json["mesh"];
+			const std::string type = meshData.value("type", "");
+			if (type == "box") //Currently generation works for basic box meshes. GLTF uses other method
+			{
+				glm::vec3 extents(
+					meshData.value("x", 1.0f),
+					meshData.value("y", 1.0f),
+					meshData.value("z", 1.0f)
+				);
+
+				auto mesh = Mesh::CreateBox(extents);
+				SetMesh(mesh);
+			}
+		}
+	}
 
 	void MeshComponent::Update(float deltaTime)
 	{

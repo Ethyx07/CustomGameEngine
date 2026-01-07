@@ -59,6 +59,9 @@ namespace eng
 			return false;
 		}
 
+		Scene::RegisterTypes();
+		application->RegisterTypes();
+
 		if (!glfwInit()) //Makes sure glfw initialised properly
 		{
 			return false;
