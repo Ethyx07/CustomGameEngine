@@ -1,5 +1,10 @@
 #pragma once
 
+#include "nlohmann/json.hpp"
+
+#include <string>
+#include <memory>
+
 namespace eng
 {
 
@@ -8,6 +13,7 @@ namespace eng
 	{
 	public:
 		virtual ~Component() = default;
+		virtual void LoadProperties(const nlohmann::json& json);
 		virtual void Init();
 		virtual void Update(float deltaTime) = 0;
 		virtual size_t GetTypeId() const = 0;
@@ -30,9 +36,57 @@ namespace eng
 		static size_t nextId;
 	};
 
+	class ComponentCreatorBase
+	{
+	public:
+		virtual ~ComponentCreatorBase() = default;
+		virtual Component* CreateComponent() = 0;
+	};
+
+	template <typename T>
+	struct ComponentCreator : ComponentCreatorBase
+	{
+		Component* CreateComponent() override
+		{
+			return new T();
+		}
+	};
+
+	class ComponentFactory //Component Factory singleton
+	{
+	public:
+		static ComponentFactory& GetInstance()
+		{
+			static ComponentFactory instance;
+			return instance;
+		}
+
+		template <typename T>
+		void RegisterComponent(const std::string& name) //Registers the creator
+		{
+			creators.emplace(name, std::make_unique<ComponentCreator<T>>);
+		}
+
+		Component* CreateComponent(const std::string& typeName) //Gets the creator and creates that type of component
+		{
+			auto iterator = creators.find(typeName);
+			if (iterator == creators.end())
+			{
+				return nullptr;
+			}
+			return iterator->second->CreateComponent();
+		}
+
+	private:
+		std::unordered_map<std::string, std::unique_ptr<ComponentCreatorBase>> creators;
+	};
+
+
+
 #define COMPONENT(ComponentClass) \
 public: \
 	static size_t TypeId() { return Component::StaticTypeId<ComponentClass>(); } \
-	size_t GetTypeId() const override {return TypeId();}
+	size_t GetTypeId() const override {return TypeId();} \
+	static void Register() {eng::ComponentFactory::GetInstance().RegisterComponent<ComponentClass>(std::string(#ComponentClass));}
 
 }

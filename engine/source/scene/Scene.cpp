@@ -1,5 +1,6 @@
 #include "scene/Scene.h"
 #include "scene/components/LightComponent.h"
+#include "Engine.h"
 
 
 namespace eng
@@ -190,6 +191,102 @@ namespace eng
 		for (auto& child : obj->children) //Loops through the children and calls the same function
 		{
 			CollectLightsRecursive(child.get(), out);
+		}
+	}
+
+
+	std::shared_ptr<Scene> Scene::Load(const std::string& path)
+	{
+		const std::string contents = Engine::GetInstance().GetFileSystem().LoadAssetFileText(path); //Gets asset file as text
+		if (contents.empty()) //Ensures something is loaded
+		{
+			return nullptr;
+		}
+		nlohmann::json j = nlohmann::json::parse(contents); //Parses contents to json
+		if (j.empty())
+		{
+			return nullptr;
+		}
+
+		auto result = std::make_shared<Scene>(); //Creates scene shared
+
+		const std::string sceneName = j.value("name", "NoName"); //Gets the name of the scene from the scene file, sets to noname if none is found
+
+		if (j.contains("objects") && j["objects"].is_array()) //Only runs if json has an objects list and it is in an array
+		{
+			const auto& objects = j["objects"];
+			for (const auto& obj : objects)
+			{
+				result->LoadObject(obj, nullptr); //As these are top-level objects they have no parent
+			}
+		}
+
+		return result;
+	}
+
+	void Scene::LoadObject(const nlohmann::json& objectJSON, GameObject* parent)
+	{
+		const std::string name = objectJSON.value("name", "Object"); //Object json data is checked for object name
+
+		GameObject* gameObject = nullptr;
+
+		if (objectJSON.contains("type"))
+		{
+			//For creating object of custom type
+		}
+		else
+		{
+			gameObject = CreateObject(name, parent); //Creates default gameobject
+		}
+
+		if (!gameObject)
+		{
+			return; //GameObject unable to be created, so it bails out early
+		}
+
+		//Position Loading
+		if (objectJSON.contains("position") && objectJSON["position"].is_array()) //Checks if json has position value and array
+		{
+			const auto& posData = objectJSON["position"]; 
+			glm::vec3 pos(posData.value("x", 0.0f), //Gets posData values and creates a vec3 pos of it
+				posData.value("y", 0.0f),
+				posData.value("z", 0.0f)
+			);
+			gameObject->SetPosition(pos);
+		}
+
+		//Rotation Loading
+		if (objectJSON.contains("rotation") && objectJSON["rotation"].is_array())
+		{
+			const auto& rotData = objectJSON["rotation"]; //Gets rotation data and converts it to glm::quat
+			glm::quat rot(rotData.value("w", 0.0f), //Begins with rotation axis as this is how glm::quat organises it
+				rotData.value("x", 0.0f),
+				rotData.value("y", 0.0f),
+				rotData.value("z", 0.0f)
+			);
+			gameObject->SetRotation(rot);
+		}
+
+		//Scale Loading
+		if (objectJSON.contains("scale") && objectJSON["scale"].is_array())
+		{
+			const auto& scaleData = objectJSON["scale"]; //Gets scale data and converts it to glm::vec3
+			glm::vec3 scale(scaleData.value("x", 0.0f),
+				scaleData.value("y", 0.0f),
+				scaleData.value("z", 0.0f)
+			);
+			gameObject->SetScale(scale);
+		}
+
+		if (objectJSON.contains("components") && objectJSON["components"].is_array())
+		{
+			const auto& compData = objectJSON["components"];
+
+			for (const auto& component : compData)
+			{
+				const std::string compType = component.value("type", ""); //Gets the component type based on its value
+
+			}
 		}
 	}
 

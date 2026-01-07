@@ -34,4 +34,9 @@ namespace eng
 	{
 		material = mat;
 	}
+
+	void MeshComponent::SetMesh(const std::shared_ptr<Mesh>& newMesh)
+	{
+		mesh = newMesh;
+	}
 }

@@ -30,6 +30,7 @@ include_directories(engine/source)
 include_directories(engine/thirdparty/glm-1.0.1)
 
 include_directories(engine/thirdparty/stb_image)
+include_directories(engine/thirdparty/json)
 
 target_link_libraries(${PROJECT_NAME} 
     Engine

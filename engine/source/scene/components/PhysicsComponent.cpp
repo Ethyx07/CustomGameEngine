@@ -17,10 +17,10 @@ namespace eng
 		}
 
 		const auto pos = owner->GetWorldPosition();
-		const auto rot = owner->GetRotation();
+		const auto rot = owner->GetWorldRotation();
 
-		rigidBody->SetPosition(pos);
-		rigidBody->SetRotation(rot);
+		owner->SetWorldPosition(rigidBody->GetPosition());
+		owner->SetWorldRotation(rigidBody->GetRotation());
 
 		Engine::GetInstance().GetPhysicsManager().AddRigidBody(rigidBody.get());
 	}
@@ -37,5 +37,10 @@ namespace eng
 			owner->SetPosition(rigidBody->GetPosition());
 			owner->SetRotation(rigidBody->GetRotation());
 		}
+	}
+
+	void PhysicsComponent::SetRigidBody(const std::shared_ptr<RigidBody>& body)
+	{
+		rigidBody = body;
 	}
 }
