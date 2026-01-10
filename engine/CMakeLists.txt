@@ -96,6 +96,31 @@ option(BUILD_SHARED_LIBS OFF)
 add_subdirectory(thirdparty/bullet3-3.25)
 target_include_directories(${PROJECT_NAME} PRIVATE thirdparty/bullet3-3.25/src)
 
+#Audio Library
+add_library(miniaudio INTERFACE)
+target_include_directories(miniaudio INTERFACE thirdparty/miniaudio)
+
+if(UNIX AND NOT APPLE)
+target_link_libraries(miniaudio INTERFACE dl pthread m)
+endif()
+
+if(WIN32)
+target_link_libraries(miniaudio INTERFACE winmm user32 ole32)
+endif()
+
+if(APPLE)
+find_library(COREAUDIO_FRAMEWORK CoreAudio)
+find_library(AUDIOTOOLBOX_FRAMEWORK AudioToolbox)
+find_library(AUDIOUNIT_FRAMEWORK AudioUnit)
+find_library(COREFOUNDATION_FRAMEWORK CoreFoundation)
+target_link_libraries(miniaudio INTERFACE
+    ${COREAUDIO_FRAMEWORK}
+    ${AUDIOUNIT_FRAMEWORK}
+    ${AUDIOTOOLBOX_FRAMEWORK}
+    ${COREFOUNDATION_FRAMEWORK}
+  )
+endif()
+
 
 # Link all thirdparty libraries
 target_link_libraries(${PROJECT_NAME} 
@@ -105,6 +130,7 @@ target_link_libraries(${PROJECT_NAME}
 	LinearMath
 	BulletCollision
 	BulletDynamics
+	miniaudio
 )
 #Copies assets directory
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
