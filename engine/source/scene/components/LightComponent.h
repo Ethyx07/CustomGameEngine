@@ -9,6 +9,8 @@ namespace eng
 	{
 		COMPONENT(LightComponent)
 	public:
+		
+		void LoadProperties(const nlohmann::json& json) override;
 		void Update(float deltaTime) override;
 		
 		void SetColour(const glm::vec3& newColour);

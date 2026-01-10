@@ -36,7 +36,7 @@ namespace eng
 		static size_t nextId;
 	};
 
-	class ComponentCreatorBase
+	struct ComponentCreatorBase
 	{
 	public:
 		virtual ~ComponentCreatorBase() = default;
@@ -60,19 +60,11 @@ namespace eng
 		template <typename T>
 		void RegisterComponent(const std::string& name) //Registers the creator
 		{
-			creators.emplace(name, std::make_unique<ComponentCreator<T>>);
+			creators.emplace(name, std::make_unique<ComponentCreator<T>>());
 		}
 
-		Component* CreateComponent(const std::string& typeName) //Gets the creator and creates that type of component
-		{
-			auto iterator = creators.find(typeName);
-			if (iterator == creators.end())
-			{
-				return nullptr;
-			}
-			return iterator->second->CreateComponent();
-		}
-
+		Component* CreateComponent(const std::string& typeName); //Gets the creator and creates that type of component
+	
 	private:
 		std::unordered_map<std::string, std::unique_ptr<ComponentCreatorBase>> creators;
 	};

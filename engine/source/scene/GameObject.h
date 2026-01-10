@@ -64,7 +64,7 @@ namespace eng
 		glm::mat4 GetLocalTransform() const;
 		glm::mat4 GetWorldTransform() const;
 
-		static GameObject* LoadGLTF(const std::string& path);
+		static GameObject* LoadGLTF(const std::string& path, Scene* gameScene);
 
 
 	protected:
@@ -86,4 +86,41 @@ namespace eng
 
 		friend class Scene;
 	};
+
+	struct ObjectCreatorBase
+	{
+		virtual ~ObjectCreatorBase() = default;
+		virtual GameObject* CreateGameObject() = 0;
+	};
+
+	template <typename T>
+	struct ObjectCreator : ObjectCreatorBase
+	{
+		GameObject* CreateGameObject()
+		{
+			return new T();
+		}
+	};
+
+	class GameObjectFactory
+	{
+	public:
+		static GameObjectFactory& GetInstance();
+
+		template <typename T>
+		void RegisterObject(const std::string& name)
+		{
+			creators.emplace(name, std::make_unique<ObjectCreator<T>>());
+		}
+
+		GameObject* CreateGameObject(const std::string& typeName);
+
+	private:
+		std::unordered_map<std::string, std::unique_ptr<ObjectCreatorBase>> creators;
+	};
+
+
+#define GAMEOBJECT(ObjectClass) \
+public: \
+static void Register() {eng::GameObjectFactory::GetInstance().RegisterObject<ObjectClass>(std::string(#ObjectClass));}
 }

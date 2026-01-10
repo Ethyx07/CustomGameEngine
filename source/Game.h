@@ -1,16 +1,18 @@
 #pragma once
+#include "source/scene/Scene.h"
 #include <eng.h>
 #include <memory>
 
 class Game : public eng::Application
 {
 public:
+	void RegisterTypes() override;
 	bool Init() override;
 	void Update(float deltaTime) override;
 	void Destroy() override;
 
 private:
-	eng::Scene* scene = nullptr;
+	std::shared_ptr<eng::Scene> scene = nullptr;
 
 	bool bCameraOne = true;
 	bool bCooldown = false;

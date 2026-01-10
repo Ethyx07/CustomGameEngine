@@ -5,7 +5,9 @@ class AnimationComponent;
 
 class Player : public eng::GameObject
 {
+	GAMEOBJECT(Player);
 public:
+	Player() = default;
 	void Init();
 	void Update(float deltaTime) override;
 

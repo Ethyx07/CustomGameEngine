@@ -50,6 +50,18 @@ namespace eng
 		return obj;
 	}
 
+	GameObject* Scene::CreateObject(const std::string& type, const std::string& name, GameObject* parent)
+	{
+		GameObject* obj = GameObjectFactory::GetInstance().CreateGameObject(type);
+		if (obj)
+		{
+			obj->SetName(name);
+			obj->scene = this;
+			obj->SetParent(parent);
+		}
+		return obj;
+	}
+
 	bool Scene::SetParent(GameObject* obj, GameObject* parent)
 	{
 		bool result = false;
@@ -236,6 +248,19 @@ namespace eng
 			}
 		}
 
+		if (j.contains("camera")) //Gets the json data that states what object contains the main camera
+		{
+			std::string cameraObjName = j.value("camera", "");
+			for (const auto& child : result->objects)
+			{
+				if (auto object = child->FindChildByName(cameraObjName))
+				{
+					result->SetMainCamera(object);
+					break;
+				}
+			}
+		}
+
 		return result;
 	}
 
@@ -250,11 +275,17 @@ namespace eng
 			std::string type = objectJSON.value("type", "");
 			if (type == "gltf") //GLTF objects are here
 			{
-				//GLTF BRANCH
+				std::string path = objectJSON.value("path", "");
+				gameObject = GameObject::LoadGLTF(path, this);
+				if (gameObject) //Ensures it is only used if a valid gameObject is returned
+				{
+					gameObject->SetParent(parent);
+					gameObject->SetName(name);
+				}
 			}
-			else //User defined objects are loaded here
+			else //User defined objects are loaded here -> uses GameObjectFactory
 			{
-
+				gameObject = CreateObject(type, name, parent);
 			}
 		}
 		else
@@ -268,7 +299,7 @@ namespace eng
 		}
 
 		//Position Loading
-		if (objectJSON.contains("position") && objectJSON["position"].is_array()) //Checks if json has position value and array
+		if (objectJSON.contains("position")) //Checks if json has position value and array
 		{
 			const auto& posData = objectJSON["position"]; 
 			glm::vec3 pos(posData.value("x", 0.0f), //Gets posData values and creates a vec3 pos of it
@@ -279,7 +310,7 @@ namespace eng
 		}
 
 		//Rotation Loading
-		if (objectJSON.contains("rotation") && objectJSON["rotation"].is_array())
+		if (objectJSON.contains("rotation"))
 		{
 			const auto& rotData = objectJSON["rotation"]; //Gets rotation data and converts it to glm::quat
 			glm::quat rot(rotData.value("w", 0.0f), //Begins with rotation axis as this is how glm::quat organises it
@@ -291,7 +322,7 @@ namespace eng
 		}
 
 		//Scale Loading
-		if (objectJSON.contains("scale") && objectJSON["scale"].is_array())
+		if (objectJSON.contains("scale"))
 		{
 			const auto& scaleData = objectJSON["scale"]; //Gets scale data and converts it to glm::vec3
 			glm::vec3 scale(scaleData.value("x", 0.0f),

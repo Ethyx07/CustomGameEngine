@@ -28,6 +28,22 @@ namespace eng
 	{
 	}
 
+	GameObjectFactory& GameObjectFactory::GetInstance()
+	{
+		static GameObjectFactory instance;
+		return instance;
+	}
+
+	GameObject* GameObjectFactory::CreateGameObject(const std::string& typeName)
+	{
+		auto iterator = creators.find(typeName);
+		if (iterator == creators.end())
+		{
+			return nullptr;
+		}
+		return iterator->second->CreateGameObject();
+	}
+
 	void GameObject::Update(float deltaTime)
 	{
 		if (!bActive)
@@ -503,10 +519,15 @@ namespace eng
 		}
 	}
 
-	GameObject* GameObject::LoadGLTF(const std::string& path) //Loads GLTF from path. Allows for GLTF scenes that contain multiple objects/meshes to be loaded as one with their hierarchy intact
+	GameObject* GameObject::LoadGLTF(const std::string& path, Scene* gameScene) //Loads GLTF from path. Allows for GLTF scenes that contain multiple objects/meshes to be loaded as one with their hierarchy intact
 	{
 		auto contents = Engine::GetInstance().GetFileSystem().LoadAssetFileText(path);
 		if (contents.empty())
+		{
+			return nullptr;
+		}
+		
+		if (!gameScene)
 		{
 			return nullptr;
 		}
@@ -530,7 +551,7 @@ namespace eng
 			return nullptr;
 		}
 
-		auto resultObject = Engine::GetInstance().GetScene()->CreateObject("Result");
+		auto resultObject = gameScene->CreateObject("Result");
 		auto scene = &data->scenes[0];
 
 		for (cgltf_size i = 0; i < scene->nodes_count; i++)

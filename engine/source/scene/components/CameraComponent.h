@@ -7,6 +7,7 @@ namespace eng
 	class CameraComponent : public Component
 	{
 		COMPONENT(CameraComponent)
+
 	public:
 		void Update(float deltaTime) override;
 

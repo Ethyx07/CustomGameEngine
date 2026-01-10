@@ -22,4 +22,14 @@ namespace eng
 		static ComponentFactory instance;
 		return instance;
 	}
+
+	Component* ComponentFactory::CreateComponent(const std::string& typeName)
+	{
+		auto iterator = creators.find(typeName);
+		if (iterator == creators.end())
+		{
+			return nullptr;
+		}
+		return iterator->second->CreateComponent();
+	}
 }

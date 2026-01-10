@@ -15,6 +15,8 @@ namespace eng
 		void Init() override;
 		void Update(float deltaTime) override;
 
+		void LoadProperties(const nlohmann::json& json) override;
+
 		void SetRigidBody(const std::shared_ptr<RigidBody>& body);
 
 	private:
