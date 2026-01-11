@@ -97,4 +97,13 @@ namespace eng
 		return bIsActive;
 	}
 
+	bool PlayerControllerComponent::OnGround() const
+	{
+		if (kinematicController) //If we have a kinematic controller, returns its on ground call. If not return false as we have no physics (cannot leave ground/jump)
+		{
+			return kinematicController->OnGround();
+		}
+		return false;
+	}
+
 }

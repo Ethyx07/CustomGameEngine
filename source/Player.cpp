@@ -6,6 +6,9 @@
 
 void Player::Init() 
 {
+	audioComponent = GetComponent<eng::AudioComponent>();
+	playerControllerComponent = GetComponent<eng::PlayerControllerComponent>();
+
 	if (auto gun = FindChildByName("Gun"))
 	{
 		animationComponent = gun->GetComponent<eng::AnimationComponent>();
@@ -32,6 +35,42 @@ void Player::Update(float deltaTime)
 		if (animationComponent && !animationComponent->IsPlaying())
 		{
 			animationComponent->Play("shoot", false);
+
+			if (audioComponent)
+			{
+				if (audioComponent->isPlaying("shoot"))
+				{
+					audioComponent->Stop("shoot");
+				}
+				audioComponent->Play("shoot");
+			}
+		}
+	}
+	if (input.isKeyPressed(GLFW_KEY_SPACE))
+	{
+		if (audioComponent && !audioComponent->isPlaying("jump"))
+		{
+			audioComponent->Play("jump");
+		}
+	}
+
+	bool walking = input.isKeyPressed(GLFW_KEY_W) ||
+		input.isKeyPressed(GLFW_KEY_A) ||
+		input.isKeyPressed(GLFW_KEY_S) ||
+		input.isKeyPressed(GLFW_KEY_D);
+
+	if (walking && playerControllerComponent && playerControllerComponent->OnGround())
+	{
+		if (audioComponent && !audioComponent->isPlaying("step"))
+		{
+			audioComponent->Play("step");
+		}
+	}
+	else
+	{
+		if (audioComponent && audioComponent->isPlaying("step"))
+		{
+			audioComponent->Stop("step");
 		}
 	}
 }

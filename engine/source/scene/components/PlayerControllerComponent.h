@@ -15,10 +15,11 @@ namespace eng
 
 		void SetIsActive(bool bActive);
 		bool GetIsActive();
+		bool OnGround() const;
 
 	private:
 		float sensitivity = 10.0f;
-		float moveSpeed = 10.0f;
+		float moveSpeed = 20.0f;
 		bool bIsActive = true;
 
 		float curXRot = 0.0f;
