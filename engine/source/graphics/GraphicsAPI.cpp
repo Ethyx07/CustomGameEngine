@@ -198,6 +198,14 @@ namespace eng
         }
     }
 
+    void GraphicsAPI::UnbindMesh(Mesh* mesh)
+    {
+        if (mesh)
+        {
+            mesh->Unbind();
+        }
+    }
+
     void  GraphicsAPI::DrawMesh(Mesh* mesh)
     {
         if (mesh) //Draws mesh if mesh is valid

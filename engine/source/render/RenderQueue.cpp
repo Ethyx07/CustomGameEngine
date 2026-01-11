@@ -30,6 +30,7 @@ namespace eng
 
 			graphicsAPI.BindMesh(command.mesh); //Binds the mesh
 			graphicsAPI.DrawMesh(command.mesh);
+			graphicsAPI.UnbindMesh(command.mesh); //Unbinds meshes VAO. Cleans up rendering process to reduce memory usage
 		}
 
 		commandList.clear(); //Clears command list as commands have been completed (will be added every update).

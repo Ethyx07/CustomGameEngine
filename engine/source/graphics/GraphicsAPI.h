@@ -26,6 +26,7 @@ namespace eng
 		void ClearBuffers();
 
 		void BindMesh(Mesh* mesh);
+		void UnbindMesh(Mesh* mesh);
 		void DrawMesh(Mesh* mesh);
 
 	private:

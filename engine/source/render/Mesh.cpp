@@ -68,6 +68,11 @@ namespace eng
 		glBindVertexArray(VAO);
 	}
 
+	void Mesh::Unbind()
+	{
+		glBindVertexArray(0);
+	}
+
 	void Mesh::Draw()
 	{
 		if (indexCount > 0) //Checks if mesh was made with indices (EBO would be created then). Draws elements if there are indices and draws array (VAO) if not

@@ -26,6 +26,17 @@ namespace eng
 
 	void Scene::Update(float deltaTime)
 	{
+		//Prevents objects deleted mid update causing crashes/issues as they arent cleaned up properly
+		objects.erase(std::remove_if(objects.begin(), objects.end(), 
+			[](const std::unique_ptr<GameObject>& obj) {return !obj->GetIsAlive();}), objects.end()); //Checks object array and removes those that are no longer alive
+
+		for (auto& obj : objectsToAdd) //Adds objects that were created during a scene update (prevents object creation mid-scene update)
+		{
+			SetParent(obj.first, obj.second);
+		}
+		objectsToAdd.clear(); //Clears object list as they have now been added to the scene
+
+		bIsUpdating = true; //Indicates scene is currently updating
 		for (auto iterator = objects.begin(); iterator != objects.end();) //Loops through vector of gameobject children
 		{
 			if ((*iterator)->GetIsAlive()) //Updates it if its alive
@@ -38,6 +49,7 @@ namespace eng
 				(iterator) = objects.erase(iterator); //If its not alive/getting destroyed it is erased from the vector
 			}
 		}
+		bIsUpdating = false; //Indicates scene has completed its update
 	}
 
 	void  Scene::Clear()
@@ -45,23 +57,37 @@ namespace eng
 		objects.clear();
 	}
 
-	GameObject* Scene::CreateObject(const std::string& name, GameObject* parent)
+	GameObject* Scene::CreateObject(const std::string& name, GameObject* parent) //Creates default gameobject
 	{
 		auto obj = new GameObject();
 		obj->SetName(name);
-		SetParent(obj, parent);
+		if (bIsUpdating) //Adds object to array if currently updating, if not adds to scene
+		{
+			objectsToAdd.push_back({ obj, parent });
+		}
+		else
+		{
+			SetParent(obj, parent);
+		}
 		obj->scene = this;
 		return obj;
 	}
 
-	GameObject* Scene::CreateObject(const std::string& type, const std::string& name, GameObject* parent)
+	GameObject* Scene::CreateObject(const std::string& type, const std::string& name, GameObject* parent) //Creates gameobject of a specific type
 	{
 		GameObject* obj = GameObjectFactory::GetInstance().CreateGameObject(type);
 		if (obj)
 		{
 			obj->SetName(name);
 			obj->scene = this;
-			obj->SetParent(parent);
+			if (bIsUpdating) //If updating, the object is added to the array that contains objects to be added before next update runs
+			{
+				objectsToAdd.push_back({ obj, parent });
+			}
+			else
+			{
+				SetParent(obj, parent);
+			}
 		}
 		return obj;
 	}
