@@ -93,6 +93,7 @@ namespace eng
 		}
 		graphicsAPI.Init();
 		physicsManager.Init();
+		audioManager.Init();
 		return application->Init();
 	}
 
@@ -201,6 +202,11 @@ namespace eng
 	PhysicsManager& Engine::GetPhysicsManager()
 	{
 		return physicsManager;
+	}
+
+	AudioManager& Engine::GetAudioManager()
+	{
+		return audioManager;
 	}
 
 	void Engine::SetScene(Scene* scene)
