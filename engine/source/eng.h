@@ -19,6 +19,8 @@
 #include "scene/components/AnimationComponent.h"
 #include "scene/components/PlayerControllerComponent.h"
 #include "scene/components/PhysicsComponent.h"
+#include "scene/components/AudioComponent.h"
+#include "scene/components/AudioListenerComponent.h"
 #include "io/FileSystem.h"
 #include "physics/PhysicsManager.h"
 #include "physics/Collider.h"
