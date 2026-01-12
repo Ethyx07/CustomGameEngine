@@ -70,7 +70,7 @@ namespace eng
 	protected:
 		GameObject() = default;
 
-	private:
+	protected:
 		std::string name;
 		GameObject* parent = nullptr;
 		Scene* scene = nullptr;

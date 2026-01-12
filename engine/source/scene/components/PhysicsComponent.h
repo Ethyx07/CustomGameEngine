@@ -18,6 +18,7 @@ namespace eng
 		void LoadProperties(const nlohmann::json& json) override;
 
 		void SetRigidBody(const std::shared_ptr<RigidBody>& body);
+		const std::shared_ptr<RigidBody>& GetRigidBody() const;
 
 	private:
 		std::shared_ptr<RigidBody> rigidBody;

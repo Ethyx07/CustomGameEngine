@@ -1,4 +1,6 @@
 #include "Player.h"
+
+#include "Bullet.h"
 #include <GLFW/glfw3.h>
 
 /*	Basic Template player class used for testing the different character implementations.Will be altered to a more
@@ -44,6 +46,17 @@ void Player::Update(float deltaTime)
 				}
 				audioComponent->Play("shoot");
 			}
+
+			auto bullet = scene->CreateObject<Bullet>("Bullet");
+			auto material = eng::Material::Load("materials/suzanne.mat");
+			auto mesh = eng::Mesh::CreateSphere(0.2f, 32, 32);
+			bullet->AddComponent(new eng::MeshComponent(material, mesh));
+			glm::vec3 pos = glm::vec3(0.0f);
+			if (auto child = FindChildByName("BOOM_35"))
+			{
+				pos = child->GetWorldPosition();
+			}
+			bullet->SetPosition(pos + rotation * glm::vec3(-0.2f, 0.2f, -1.75f));
 		}
 	}
 	if (input.isKeyPressed(GLFW_KEY_SPACE))
