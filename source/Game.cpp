@@ -13,7 +13,7 @@ void Game::RegisterTypes()
 
 bool Game::Init()
 {
-	scene = eng::Scene::Load("scenes/scene.sc");
+	scene = eng::Scene::Load("scenes/sceneTwo.sc");
 	eng::Engine::GetInstance().SetScene(scene.get());
 
 

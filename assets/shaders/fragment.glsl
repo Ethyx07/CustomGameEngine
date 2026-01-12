@@ -31,8 +31,11 @@ void main()
     float specularStrength = 0.5;
     vec3 specular = specularStrength * spec * uLight.colour;
 
-    vec3 result = diffuse + specular;
+    //Ambient Calc
+    const float ambientStrength = 0.4;
+    vec3 ambient = ambientStrength * uLight.colour;
 
     vec4 texColor = texture(baseColourTexture, vUV);
-    FragColor = texColor * vec4(result, 1.0);
+    vec3 result = (diffuse + specular + ambient) * texColor.xyz;
+    FragColor = vec4(result, 1.0);
 }

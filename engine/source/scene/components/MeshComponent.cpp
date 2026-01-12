@@ -18,8 +18,10 @@ namespace eng
 		//Material Loading
 		if (json.contains("material"))
 		{
-			const std::string matPath = json.value("material", "");
+			auto& matObj = json["material"];
+			const std::string matPath = matObj.value("path", "");
 			auto material = Material::Load(matPath);
+
 			if (material)
 			{
 				SetMaterial(material);
@@ -40,6 +42,13 @@ namespace eng
 				);
 
 				auto mesh = Mesh::CreateBox(extents);
+				SetMesh(mesh);
+			}
+			else if (type == "sphere")
+			{
+				const float radius = meshData.value("radius", 1.0f);
+				auto mesh = Mesh::CreateSphere(radius, 32, 32);
+
 				SetMesh(mesh);
 			}
 		}
