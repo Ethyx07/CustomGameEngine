@@ -17,6 +17,9 @@ namespace eng
 		bool GetIsActive();
 		bool OnGround() const;
 
+		void SetMoveSpeed(float newSpeed);
+		float GetMoveSpeed();
+
 	private:
 		float sensitivity = 10.0f;
 		float moveSpeed = 20.0f;

@@ -82,8 +82,8 @@ namespace eng
 		const auto pos = owner->GetWorldPosition();
 		const auto rot = owner->GetWorldRotation();
 
-		owner->SetWorldPosition(rigidBody->GetPosition());
-		owner->SetWorldRotation(rigidBody->GetRotation());
+		rigidBody->SetPosition(pos);
+		rigidBody->SetRotation(rot);
 
 		Engine::GetInstance().GetPhysicsManager().AddRigidBody(rigidBody.get());
 	}

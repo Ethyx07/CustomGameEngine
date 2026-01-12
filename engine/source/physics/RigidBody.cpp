@@ -113,4 +113,9 @@ namespace eng
 		return glm::quat(rot.w(), rot.x(), rot.y(), rot.z());
 	}
 
+	void RigidBody::ApplyImpulse(const glm::vec3& impulse)
+	{
+		body->applyCentralImpulse(btVector3(btScalar(impulse.x), btScalar(impulse.y), btScalar(impulse.z)));
+	}
+
 }

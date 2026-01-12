@@ -36,6 +36,8 @@ namespace eng
 		glm::vec3 GetPosition() const;
 		glm::quat GetRotation() const;
 
+		void ApplyImpulse(const glm::vec3& impulse);
+
 	private:
 		BodyType type = BodyType::Static;
 		std::shared_ptr<Collider> collider;

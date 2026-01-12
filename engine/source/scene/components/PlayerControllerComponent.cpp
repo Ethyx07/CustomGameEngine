@@ -92,6 +92,16 @@ namespace eng
 		bIsActive = bActive;
 	}
 
+	void PlayerControllerComponent::SetMoveSpeed(float newSpeed)
+	{
+		moveSpeed = newSpeed;
+	}
+
+	float PlayerControllerComponent::GetMoveSpeed()
+	{
+		return moveSpeed;
+	}
+
 	bool PlayerControllerComponent::GetIsActive()
 	{
 		return bIsActive;
