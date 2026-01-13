@@ -1,5 +1,6 @@
 #pragma once
 #include "physics/Collider.h"
+#include "physics/CollisionObject.h"
 
 #include <memory>
 #include <glm/vec3.hpp>
@@ -19,7 +20,7 @@ namespace eng
 
 	
 
-	class RigidBody
+	class RigidBody : public CollisionObject
 	{
 	public:
 		RigidBody(BodyType bodyType, const std::shared_ptr<Collider>& bodyCollider, float bodyMass, float bodyFriction);

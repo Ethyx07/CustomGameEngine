@@ -1,7 +1,7 @@
 #pragma once
 #include <eng.h>
 
-class Bullet : public eng::GameObject
+class Bullet : public eng::GameObject, public eng::IContactListener
 {
 	GAMEOBJECT(Bullet)
 public:

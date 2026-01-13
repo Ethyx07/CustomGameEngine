@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "TestObject.h"
 #include "Player.h"
+#include "JumpPlatform.h"
 #include "GLFW/glfw3.h"
 #include <string>
 #include <iostream>
@@ -9,6 +10,7 @@
 void Game::RegisterTypes()
 {
 	Player::Register();
+	JumpPlatform::Register();
 }
 
 bool Game::Init()

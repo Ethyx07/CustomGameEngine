@@ -10,6 +10,8 @@ namespace eng
 	KinematicCharacterController::KinematicCharacterController(float kinRadius, float kinHeight)
 		: height(kinHeight), radius(kinRadius)
 	{
+		collisionObjectType = CollisionObjectType::KinematicPlayerController;
+
 		auto world = Engine::GetInstance().GetPhysicsManager().GetWorld(); //Gets world instance
 		auto capsule = new btCapsuleShape(radius, height); //Creates capsule comp for kinematic controller. (Standard shape for characters)
 
@@ -21,6 +23,7 @@ namespace eng
 		ghost->setWorldTransform(start);
 		ghost->setCollisionShape(capsule);
 		ghost->setCollisionFlags(ghost->getCollisionFlags() | btCollisionObject::CF_CHARACTER_OBJECT);
+		ghost->setUserPointer(this);
 
 		world->getBroadphase()->getOverlappingPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
 

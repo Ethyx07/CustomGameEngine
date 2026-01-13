@@ -15,6 +15,8 @@ namespace eng
 			return;
 		}
 
+		collisionObjectType = CollisionObjectType::RigidBody;
+
 		btVector3 inertia(0, 0, 0);
 		if (type == BodyType::Dynamic && mass > 0.0f && collider->GetShape()) //Only objects with mass have local inertia. Also only dynamic body types are affected naturally (not scripted)
 		{
@@ -30,6 +32,7 @@ namespace eng
 
 		body = std::make_unique<btRigidBody>(info);
 		body->setFriction(btScalar(friction));
+		body->setUserPointer(this);
 
 		//Kinematic Only:
 		if (type == BodyType::Kinematic)

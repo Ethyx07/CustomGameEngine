@@ -1478,7 +1478,7 @@
         {
           "type": "MeshComponent",
           "mesh": {
-            "type": "box",
+            "type": "sphere",
             "x": 1.5,
             "y": 1.5,
             "z": 1.5
@@ -1527,6 +1527,53 @@
             "r": 1,
             "g": 1,
             "b": 1
+          }
+        }
+      ]
+    },
+    {
+      "name": "JumpPlatform",
+      "type": "JumpPlatform",
+      "position": {
+        "x": -7,
+        "y": 1.75,
+        "z": 1
+      },
+      "components": [
+        {
+          "type": "MeshComponent",
+          "mesh": {
+            "type": "box",
+            "x": 2,
+            "y": 0.2,
+            "z": 2
+          },
+          "material": {
+            "path": "materials/checker.mat",
+            "params": {
+              "float3": [
+                {
+                  "name": "colour",
+                  "value0": 1,
+                  "value1": 0,
+                  "value2": 0
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "PhysicsComponent",
+          "collider": {
+            "type": "box",
+            "x": 2,
+            "y": 0.2,
+            "z": 2
+          },
+          "body": {
+            "mass": 0,
+            "friction": 0.5,
+            "type": "static"
           }
         }
       ]
