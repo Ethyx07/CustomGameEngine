@@ -25,7 +25,7 @@ namespace eng
 			{
 				auto& light = lights[0];
 				shaderProgram->SetUniform("uLight.colour", light.colour);
-				shaderProgram->SetUniform("uLight.position", light.position);
+				shaderProgram->SetUniform("uLight.direction", glm::normalize(-light.position));
 			}
 
 			graphicsAPI.BindMesh(command.mesh); //Binds the mesh

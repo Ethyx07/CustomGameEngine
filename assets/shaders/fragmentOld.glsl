@@ -3,12 +3,11 @@
 struct Light
 {
     vec3 colour;
-    vec3 direction;
+    vec3 position;
 };
 uniform Light uLight;
 uniform vec3 uCameraPos;
 uniform vec3 colour;
-
 out vec4 FragColor;
 
 in vec2 vUV;
@@ -22,7 +21,7 @@ void main()
     vec3 norm = normalize(vNormal);
 
     //Diffuse Calc
-    vec3 lightDir = normalize(-uLight.direction);
+    vec3 lightDir = normalize(uLight.position - vFragPos);
     float diff = max(dot(norm, lightDir), 0);
     vec3 diffuse = diff * uLight.colour;
 

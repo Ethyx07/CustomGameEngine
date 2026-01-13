@@ -102,7 +102,7 @@ namespace eng
             struct Light
             {
                 vec3 colour;
-                vec3 position;
+                vec3 direction;
             };
             uniform Light uLight;
             uniform vec3 uCameraPos;
@@ -119,7 +119,7 @@ namespace eng
                 vec3 norm = normalize(vNormal);
 
                 //Diffuse Calc
-                vec3 lightDir = normalize(uLight.position - vFragPos);
+                vec3 lightDir = normalize(-uLight.direction);
                 float diff = max(dot(norm, lightDir), 0);
                 vec3 diffuse = diff * uLight.colour;
 
