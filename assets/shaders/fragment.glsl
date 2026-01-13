@@ -7,6 +7,7 @@ struct Light
 };
 uniform Light uLight;
 uniform vec3 uCameraPos;
+uniform vec3 colour;
 out vec4 FragColor;
 
 in vec2 vUV;
@@ -36,6 +37,6 @@ void main()
     vec3 ambient = ambientStrength * uLight.colour;
 
     vec4 texColor = texture(baseColourTexture, vUV);
-    vec3 result = (diffuse + specular + ambient) * texColor.xyz;
+    vec3 result = (diffuse + specular + ambient) * texColor.xyz * colour;
     FragColor = vec4(result, 1.0);
 }

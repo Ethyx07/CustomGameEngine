@@ -22,11 +22,68 @@ namespace eng
 			const std::string matPath = matObj.value("path", "");
 			auto material = Material::Load(matPath);
 
-			if (material)
+			if (material) //Only sets material if it is valid
 			{
-				SetMaterial(material);
+				material->SetParam("colour", glm::vec3(1.0f)); //If uses the colour tint, defaulted as white
+				if (matObj.contains("params")) //If there are parameters, it checks what type, looping through the complete list of them
+				{
+					auto& paramObj = matObj["params"];
+
+					//One Parameter Floats
+					if (paramObj.contains("float"))
+					{
+						for (auto param : paramObj["float"])
+						{
+							std::string name = param.value("name", "");
+							float value = param.value("value", 0.0f);
+							material->SetParam(name, value);
+						}
+
+					}
+
+					//2 Float Params
+					if (paramObj.contains("float2"))
+					{
+						for (auto param : paramObj["float2"])
+						{
+							std::string name = param.value("name", "");
+							float value0 = param.value("value0", 0.0f);
+							float value1 = param.value("value1", 0.0f);
+							material->SetParam(name, value0, value1);
+						}
+
+					}
+
+					//3 Float Params
+					if (paramObj.contains("float3"))
+					{
+						for (auto param : paramObj["float3"])
+						{
+							std::string name = param.value("name", "");
+							float value0 = param.value("value0", 0.0f);
+							float value1 = param.value("value1", 0.0f);
+							float value2 = param.value("value2", 0.0f);
+							material->SetParam(name, glm::vec3(value0, value1, value2));
+						}
+					}
+
+					//Textures
+					if (paramObj.contains("textures"))
+					{
+						for (auto& param : paramObj["textures"])
+						{
+							std::string name = param.value("name", "");
+							std::string texPath = param.value("path", "");
+							auto texture = Texture::Load(texPath);
+
+							material->SetParam(name, texture);
+						}
+					}
+				}
 			}
+			SetMaterial(material);
 		}
+
 
 		//Mesh Loading
 		if (json.contains("mesh"))

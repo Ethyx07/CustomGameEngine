@@ -798,7 +798,7 @@
             "params": {
               "float3": [
                 {
-                  "name": "color",
+                  "name": "colour",
                   "value0": 1.0,
                   "value1": 0.0,
                   "value2": 0.0
@@ -844,7 +844,7 @@
             "params": {
               "float3": [
                 {
-                  "name": "color",
+                  "name": "colour",
                   "value0": 0.0,
                   "value1": 1.0,
                   "value2": 0.0
@@ -890,7 +890,7 @@
             "params": {
               "float3": [
                 {
-                  "name": "color",
+                  "name": "colour",
                   "value0": 0.7,
                   "value1": 0.5,
                   "value2": 0.2
@@ -936,7 +936,7 @@
             "params": {
               "float3": [
                 {
-                  "name": "color",
+                  "name": "colour",
                   "value0": 0.2,
                   "value1": 0.5,
                   "value2": 0.1
@@ -982,7 +982,7 @@
             "params": {
               "float3": [
                 {
-                  "name": "color",
+                  "name": "colour",
                   "value0": 0.2,
                   "value1": 0.1,
                   "value2": 0.9
@@ -1028,7 +1028,7 @@
             "params": {
               "float3": [
                 {
-                  "name": "color",
+                  "name": "colour",
                   "value0": 1,
                   "value1": 0,
                   "value2": 1
@@ -1074,7 +1074,7 @@
             "params": {
               "float3": [
                 {
-                  "name": "color",
+                  "name": "colour",
                   "value0": 0.1,
                   "value1": 0.8,
                   "value2": 0.7
@@ -1120,7 +1120,7 @@
             "params": {
               "float3": [
                 {
-                  "name": "color",
+                  "name": "colour",
                   "value0": 0.1,
                   "value1": 0.8,
                   "value2": 0.7
@@ -1166,7 +1166,7 @@
             "params": {
               "float3": [
                 {
-                  "name": "color",
+                  "name": "colour",
                   "value0": 0.9,
                   "value1": 0.2,
                   "value2": 0.3
@@ -1212,7 +1212,7 @@
             "params": {
               "float3": [
                 {
-                  "name": "color",
+                  "name": "colour",
                   "value0": 0.2,
                   "value1": 0.2,
                   "value2": 0.3
@@ -1258,7 +1258,7 @@
             "params": {
               "float3": [
                 {
-                  "name": "color",
+                  "name": "colour",
                   "value0": 0.5,
                   "value1": 0.1,
                   "value2": 0.9
@@ -1304,7 +1304,7 @@
             "params": {
               "float3": [
                 {
-                  "name": "color",
+                  "name": "colour",
                   "value0": 1,
                   "value1": 1,
                   "value2": 0
@@ -1350,7 +1350,7 @@
             "params": {
               "float3": [
                 {
-                  "name": "color",
+                  "name": "colour",
                   "value0": 1,
                   "value1": 1,
                   "value2": 0
@@ -1396,7 +1396,7 @@
             "params": {
               "float3": [
                 {
-                  "name": "color",
+                  "name": "colour",
                   "value0": 1,
                   "value1": 0,
                   "value2": 0
@@ -1442,7 +1442,7 @@
             "params": {
               "float3": [
                 {
-                  "name": "color",
+                  "name": "colour",
                   "value0": 0,
                   "value1": 0,
                   "value2": 1
@@ -1488,7 +1488,7 @@
             "params": {
               "float3": [
                 {
-                  "name": "color",
+                  "name": "colour",
                   "value0": 0,
                   "value1": 1,
                   "value2": 1
@@ -1523,7 +1523,7 @@
       "components": [
         {
           "type": "LightComponent",
-          "color": {
+          "colour": {
             "r": 1,
             "g": 1,
             "b": 1

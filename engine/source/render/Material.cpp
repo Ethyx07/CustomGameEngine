@@ -27,6 +27,11 @@ namespace eng
 		float2Params[name] = { v1, v2 };
 	}
 
+	void Material::SetParam(const std::string& name, glm::vec3 float3)
+	{
+		float3Params[name] = float3;
+	}
+
 	void Material::SetParam(const std::string& name, const std::shared_ptr<Texture>& texture)
 	{
 		textures[name] = texture;
@@ -54,6 +59,11 @@ namespace eng
 		for (auto& param : textures)
 		{
 			shaderProgram->SetTexture(param.first, param.second.get());
+		}
+
+		for (auto& param : float3Params) //Iterates through all float3Params, setting their uniforms
+		{
+			shaderProgram->SetUniform(param.first, param.second);
 		}
 	}
 
