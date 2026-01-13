@@ -69,6 +69,7 @@ namespace eng
 		if (rigidBody)
 		{
 			SetRigidBody(rigidBody);
+			rigidBody->SetOwner(GetOwner());
 		}
 	}
 
@@ -78,7 +79,7 @@ namespace eng
 		{
 			return;
 		}
-
+		rigidBody->SetOwner(GetOwner());
 		const auto pos = owner->GetWorldPosition();
 		const auto rot = owner->GetWorldRotation();
 

@@ -18,10 +18,15 @@ void Bullet::OnContact(eng::CollisionObject* obj, const glm::vec3& position, con
 {
 	if (obj->GetCollisionObjectType() == eng::CollisionObjectType::RigidBody)
 	{
-		auto rigidBody = static_cast<eng::RigidBody*>(obj); //How to get kinematic controller from player
-		if (controller)
+		auto rigidBody = static_cast<eng::RigidBody*>(obj); //Passes it to rigidbody
+		if (rigidBody)
 		{
-			controller->Jump(glm::vec3(0.0f, 20.0f, 0.0f));
+			auto hitObj = rigidBody->GetOwner();
+			if (hitObj) 
+			{
+				hitObj->MarkForDestroy();
+				this->MarkForDestroy();
+			}
 		}
 	}
 }

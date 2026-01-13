@@ -1,6 +1,7 @@
 #pragma once
 #include "physics/Collider.h"
 #include "physics/CollisionObject.h"
+#include "scene/GameObject.h"
 
 #include <memory>
 #include <glm/vec3.hpp>
@@ -28,6 +29,8 @@ namespace eng
 
 		btRigidBody* GetBody();
 		BodyType GetType();
+		GameObject* GetOwner() const;
+		void SetOwner(GameObject* obj);
 		
 		void SetAddedToWorld(bool added);
 		bool IsAddedToWorld();
@@ -42,10 +45,11 @@ namespace eng
 	private:
 		BodyType type = BodyType::Static;
 		std::shared_ptr<Collider> collider;
-		float mass = 0.0f;
+		float mass = 0.0f;	
 		float friction = 0.0f;
 		bool bIsAddedToWorld = false;
 
 		std::unique_ptr<btRigidBody> body;
+		GameObject* owningObject;
 	};
 }

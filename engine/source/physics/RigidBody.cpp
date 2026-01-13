@@ -60,6 +60,16 @@ namespace eng
 		return type;
 	}
 
+	GameObject* RigidBody::GetOwner() const
+	{
+		return owningObject;
+	}
+
+	void RigidBody::SetOwner(GameObject* obj)
+	{
+		owningObject = obj;
+	}
+
 	void RigidBody::SetAddedToWorld(bool added)
 	{
 		bIsAddedToWorld = added;

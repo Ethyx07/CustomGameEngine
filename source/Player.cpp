@@ -68,6 +68,7 @@ void Player::Update(float deltaTime)
 
 			glm::vec3 front = rotation * glm::vec3(0.0f, 0.0f, -1.0f);
 			rigidBody->ApplyImpulse(front * 500.0f);
+			rigidBody->AddContactListener(bullet);
 		}
 	}
 	if (input.isKeyPressed(GLFW_KEY_SPACE))
