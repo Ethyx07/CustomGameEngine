@@ -13,6 +13,7 @@ public:
 
 private:
 	eng::AnimationComponent* animationComponent = nullptr;
+	eng::AnimationComponent* cubeAnimationComponent = nullptr;
 
 	eng::AudioComponent* audioComponent = nullptr;
 	eng::PlayerControllerComponent* playerControllerComponent = nullptr;

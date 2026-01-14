@@ -16,6 +16,12 @@ void Player::Init()
 		animationComponent = gun->GetComponent<eng::AnimationComponent>();
 	}
 
+	if (auto cubeDude = FindChildByName("Cubedude"))
+	{
+		cubeAnimationComponent = cubeDude->GetComponent<eng::AnimationComponent>();
+		cubeAnimationComponent->Play("RotationStation", true);
+	}
+
 	if (auto bullet = FindChildByName("bullet_33"))
 	{
 		bullet->SetActive(false);
@@ -32,6 +38,7 @@ void Player::Update(float deltaTime)
 	GameObject::Update(deltaTime);
 
 	auto& input = eng::Engine::GetInstance().GetInputManager();
+
 	if (input.isMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
 	{
 		if (animationComponent && !animationComponent->IsPlaying())
