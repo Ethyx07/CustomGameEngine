@@ -2,6 +2,7 @@
 #include "TestObject.h"
 #include "Player.h"
 #include "JumpPlatform.h"
+#include "DiscoLight.h"
 #include "GLFW/glfw3.h"
 #include <string>
 #include <iostream>
@@ -11,11 +12,12 @@ void Game::RegisterTypes()
 {
 	Player::Register();
 	JumpPlatform::Register();
+	DiscoLight::Register();
 }
 
 bool Game::Init()
 {
-	scene = eng::Scene::Load("scenes/sceneTwo.sc");
+	scene = eng::Scene::Load("scenes/level01.sc");
 	eng::Engine::GetInstance().SetScene(scene.get());
 
 

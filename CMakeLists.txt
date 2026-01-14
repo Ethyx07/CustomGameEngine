@@ -18,6 +18,8 @@ set(PROJECT_SOURCE_FILES
   source/Bullet.cpp
   source/JumpPlatform.h
   source/JumpPlatform.cpp
+  source/DiscoLight.h
+  source/DiscoLight.cpp
 )
 
 include_directories(engine/thirdparty/glew/include)

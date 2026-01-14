@@ -17,6 +17,7 @@ namespace eng
 
 	void LightComponent::Update(float deltaTime)
 	{
+		
 	}
 
 	void LightComponent::SetColour(const glm::vec3& newColour)

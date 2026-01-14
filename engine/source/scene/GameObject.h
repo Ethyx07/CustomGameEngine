@@ -37,9 +37,11 @@ namespace eng
 		void SetActive(bool active);
 
 		void AddComponent(Component* component);
-		template<typename T, typename = typename std::enable_if_t<std::is_base_of_v<Component, T>>>
-		T* GetComponent()
+		template<typename T>
+		T* GetComponentExact() //Gets the exact component. If wanting to return component & child classes use GetComponent()
 		{
+			static_assert(std::is_base_of_v<Component, T>, "GetComponentExact<T>: T must derive from Component class");
+
 			size_t typeId = Component::StaticTypeId<T>();
 
 			for (auto& component : components) //Loops through all components and tries to find the one that the component we are getting shares 
@@ -47,6 +49,20 @@ namespace eng
 				if (component->GetTypeId() == typeId)
 				{
 					return static_cast<T*>(component.get()); //Returns reference to that component
+				}
+			}
+			return nullptr;
+		}
+
+		template<typename T>
+		T* GetComponent() //Gets component of type T. Returned component can be child of type T
+		{
+			static_assert(std::is_base_of_v<Component, T>, "GetComponent<T>: T must derive from Component class");
+			for (auto& component : components)
+			{
+				if (auto* castedComponent = dynamic_cast<T*>(component.get())) //Checks if component is of Type T or derived from it
+				{
+					return castedComponent;
 				}
 			}
 			return nullptr;
