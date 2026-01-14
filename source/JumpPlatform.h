@@ -9,4 +9,7 @@ public:
 	void Init() override;
 
 	void OnContact(eng::CollisionObject* obj, const glm::vec3& position, const glm::vec3& normal) override;
+
+private:
+	eng::AudioComponent* audioComponent = nullptr;
 };

@@ -2,6 +2,7 @@
 
 void JumpPlatform::Init()
 {
+	audioComponent = GetComponent<eng::AudioComponent>();
 	auto physics = GetComponent<eng::PhysicsComponent>();
 	if (physics) //Gets physics component
 	{
@@ -21,6 +22,10 @@ void JumpPlatform::OnContact(eng::CollisionObject* obj, const glm::vec3& positio
 		if (controller)
 		{
 			controller->Jump(glm::vec3(0.0f, 20.0f, 0.0f));
+			if (audioComponent)
+			{
+				audioComponent->Play("boing", false);
+			}
 		}
 	}
 }

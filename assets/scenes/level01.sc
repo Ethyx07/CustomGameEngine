@@ -329,6 +329,110 @@
 			]
 		},
 		{
+			"name": "Cube01",
+			"objType": "destructable",
+			"position": {
+				"x": 4,
+				"y": 2,
+				"z": 4
+			},
+			"components": [
+				{
+					"type": "MeshComponent",
+					"material": {
+						"path": "materials/checker.mat",
+						"params": {
+							"float3": [
+								{
+									"name": "colour",
+									"value0": 1.0,
+									"value1": 0.0,
+									"value2": 0.0
+								}
+							]
+						}
+					},
+					"mesh": {
+						"type": "box",
+						"x": 2,
+						"y": 2,
+						"z": 2
+					}
+				},
+				{
+					"type": "PhysicsComponent",
+					"collider": {
+						"type": "box",
+						"x": 2,
+						"y": 2,
+						"z": 2
+					},
+					"body": {
+						"mass": 2,
+						"friction": 0.5,
+						"type": "dynamic"
+					}
+				}
+			]
+		},
+		{
+			"name": "JumpPlatform",
+			"type": "JumpPlatform",
+			"position": {
+				"x": -7,
+				"y": 1.2,
+				"z": 1
+			},
+			"components": [
+				{
+					"type": "MeshComponent",
+					"mesh": {
+						"type": "box",
+						"x": 2,
+						"y": 0.2,
+						"z": 2
+					},
+					"material": {
+						"path": "materials/checker.mat",
+						"params": {
+							"float3": [
+								{
+									"name": "colour",
+									"value0": 1.0,
+									"value1": 0.0,
+									"value2": 0.0
+								}
+							]
+						}
+					}
+				},
+				{
+					"type": "AudioComponent",
+					"audio": [
+						{
+							"name": "boing",
+							"path": "audio/boing.wav",
+							"volume": 10
+						}
+					]
+				},
+				{
+					"type": "PhysicsComponent",
+					"collider": {
+						"type": "box",
+						"x": 2,
+						"y": 0.2,
+						"z": 2
+					},
+					"body": {
+						"mass": 0,
+						"friction": 0.5,
+						"type": "static"
+					}
+				}
+			]
+		},
+		{
 			"name": "Sphere02",
 			"position": {
 				"x": 5,
