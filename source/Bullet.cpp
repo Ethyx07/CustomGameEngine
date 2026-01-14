@@ -22,7 +22,7 @@ void Bullet::OnContact(eng::CollisionObject* obj, const glm::vec3& position, con
 		if (rigidBody)
 		{
 			auto hitObj = rigidBody->GetOwner();
-			if (hitObj) 
+			if (hitObj && hitObj->GetObjectType() == eng::ObjectType::DESTRUCTABLE) //Only destroys destructables
 			{
 				hitObj->MarkForDestroy();
 				this->MarkForDestroy();

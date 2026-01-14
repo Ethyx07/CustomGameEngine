@@ -11,6 +11,12 @@ namespace eng
 {
 	class Scene;
 
+	enum class ObjectType
+	{
+		DEFAULT,
+		DESTRUCTABLE
+	};
+
 	class GameObject
 	{
 	public:
@@ -61,6 +67,9 @@ namespace eng
 		const glm::vec3& GetScale() const;
 		void SetScale(const glm::vec3& scal);
 
+		const ObjectType GetObjectType() const;
+		void SetObjectType(const ObjectType objT);
+
 		glm::mat4 GetLocalTransform() const;
 		glm::mat4 GetWorldTransform() const;
 
@@ -82,6 +91,8 @@ namespace eng
 		glm::vec3 scale = glm::vec3(1.0f);
 
 		bool bActive = true;
+
+		ObjectType objType = ObjectType::DEFAULT;
 
 
 		friend class Scene;

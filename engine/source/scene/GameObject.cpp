@@ -22,6 +22,15 @@ namespace eng
 {
 	void GameObject::LoadProperties(const nlohmann::json& json)
 	{
+		if (json.contains("objType"))
+		{
+			auto objectType = json.value("objType", "DEFAULT");
+			if (objectType == "destructable")
+			{
+				SetObjectType(ObjectType::DESTRUCTABLE);
+			}
+
+		}
 	}
 
 	void GameObject::Init()
@@ -128,6 +137,16 @@ namespace eng
 	bool GameObject::GetIsAlive() const
 	{
 		return bIsAlive;
+	}
+
+	const ObjectType GameObject::GetObjectType() const
+	{
+		return objType;
+	}
+
+	void GameObject::SetObjectType(const ObjectType objT)
+	{
+		objType = objT;
 	}
 
 	void GameObject::MarkForDestroy()

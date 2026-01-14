@@ -1469,6 +1469,7 @@
     },
     {
       "name": "ObjectCollide15",
+      "objType": "destructable",
       "position": {
         "x": 10,
         "y": 4.253,
