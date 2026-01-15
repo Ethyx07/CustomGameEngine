@@ -4,6 +4,7 @@
 #include <vector>
 #include <memory>
 #include <glm/vec3.hpp>
+#include <glm/vec2.hpp>
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/quaternion.hpp>
 
@@ -88,6 +89,20 @@ namespace eng
 
 		glm::mat4 GetLocalTransform() const;
 		glm::mat4 GetWorldTransform() const;
+
+		glm::vec2 GetWorldPosition2D() const;
+		glm::vec2 GetPosition2D() const;
+		void SetPostion2D(const glm::vec2& pos);
+
+		float GetRotation2D() const;
+		void SetRotation2D(float rot);
+
+		glm::vec2 GetScale2D() const;
+		void SetScale2D(const glm::vec2 scal);
+
+		glm::mat4 GetLocalTransform2D() const;
+		glm::mat4 GetWorldTransform2D() const;
+
 
 		static GameObject* LoadGLTF(const std::string& path, Scene* gameScene);
 

@@ -264,6 +264,72 @@ namespace eng
 		else return GetLocalTransform();
 	}
 
+	glm::vec2 GameObject::GetWorldPosition2D() const
+	{
+		glm::vec4 hom = GetWorldTransform2D() * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+		return glm::vec2(hom) / hom.w;
+	}
+
+	glm::vec2 GameObject::GetPosition2D() const
+	{
+		return glm::vec2(position);
+	}
+
+	void GameObject::SetPostion2D(const glm::vec2& pos)
+	{
+		position = glm::vec3(pos, 0.0f);
+	}
+
+	float GameObject::GetRotation2D() const
+	{
+		return glm::angle(rotation);
+	}
+
+	void GameObject::SetRotation2D(float rot)
+	{
+		//rotation = glm::angleAxis(rotation, glm::vec3(0.0f, 0.0f, 1.0f));
+	}
+
+	glm::vec2 GameObject::GetScale2D() const
+	{
+		return glm::vec2(scale);
+	}
+
+	void GameObject::SetScale2D(const glm::vec2 scal)
+	{
+		scale = glm::vec3(scal, 1.0f);
+	}
+
+	glm::mat4 GameObject::GetLocalTransform2D() const
+	{
+		glm::mat4 mat = glm::mat4(1.0f); //Defaults any value to 1.0f unless altered later
+
+		const auto rotationZ = GetRotation2D(); //Gets rotation angle
+		float cosVal = cos(rotationZ); //Gets cos value of rotationAngle
+		float sinVal = sin(rotationZ); //Gets sine value of rotationAngle
+
+		mat[0][0] = scale.x * cosVal;
+		mat[0][1] = scale.x * sinVal;
+		mat[1][0] = -scale.y * sinVal;
+		mat[1][1] = scale.y * cosVal;
+		mat[3][0] = position.x;
+		mat[3][1] = position.y;
+
+		return mat;
+	}
+
+	glm::mat4 GameObject::GetWorldTransform2D() const //If an object has a parent it gets its world transform and multiplies it by its own local transform. This becomes recursive until it reaches the top object with no parent
+	{
+		if (parent)
+		{
+			return parent->GetWorldTransform2D() * GetLocalTransform2D();
+		}
+		else
+		{
+			return GetLocalTransform2D();
+		}
+	}
+
 	void ParseGLTFNode(cgltf_node* node, GameObject* parent, const std::filesystem::path& folder)
 	{
 		auto object = parent->GetScene()->CreateObject(node->name, parent);
