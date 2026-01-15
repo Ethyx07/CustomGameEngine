@@ -6,13 +6,24 @@
 
 namespace eng
 {
+	void RenderQueue::Init()
+	{
+		mesh2D = Mesh::CreatePlane();
+	}
+
 	void RenderQueue::Submit(const RenderCommand& command)
 	{
 		commandList.push_back(command);  //Adds render command to list. command contains a mesh and material
 	}
 
+	void RenderQueue::Submit(const RenderCommand2D& command)
+	{
+		commandList2D.push_back(command); //Adds 2d command to list
+	}
+
 	void RenderQueue::Draw(GraphicsAPI& graphicsAPI, const CameraData& cameraData, const std::vector<LightData> lights)
 	{
+		//3D rendering
 		for (auto& command : commandList)
 		{
 			graphicsAPI.BindMaterial(command.material); //Binds material
@@ -34,5 +45,28 @@ namespace eng
 		}
 
 		commandList.clear(); //Clears command list as commands have been completed (will be added every update).
+
+		//2D rendering
+		graphicsAPI.SetDepthTestEnabled(false);
+		const auto shaderProgram2D = graphicsAPI.GetDefault2DShaderProgram();
+		shaderProgram2D->Bind();
+		mesh2D->Bind();
+		for (auto& command : commandList2D)
+		{
+			//Rendering Sprites
+			shaderProgram2D->SetUniform("uModel", command.modelMatrix);
+			shaderProgram2D->SetUniform("uView", cameraData.viewMatrix);
+			shaderProgram2D->SetUniform("uProjection", cameraData.orthographicMatrix);
+			shaderProgram2D->SetUniform("uSize", command.size.x, command.size.y);
+			shaderProgram2D->SetUniform("uPivot", command.pivot.x, command.pivot.y);
+			shaderProgram2D->SetUniform("uUVMin", command.lowerLeftUV.x, command.lowerLeftUV.y);
+			shaderProgram2D->SetUniform("uUVMax", command.upperRightUV.x, command.upperRightUV.y);
+			shaderProgram2D->SetUniform("uColour", command.colour);
+			shaderProgram2D->SetTexture("uTex", command.texture);
+
+			mesh2D->Draw();
+		}
+		mesh2D->Unbind();
+		graphicsAPI.SetDepthTestEnabled(true);
 	}
 }

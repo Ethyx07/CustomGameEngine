@@ -92,6 +92,7 @@ namespace eng
 			return false;
 		}
 		graphicsAPI.Init();
+		renderQueue.Init();
 		physicsManager.Init();
 		audioManager.Init();
 		return application->Init();
@@ -137,6 +138,9 @@ namespace eng
 						cameraData.viewMatrix = cameraComponent->GetViewMatrix();
 						cameraData.projectionMatrix = cameraComponent->GetProjectionMatrix(aspect);
 						cameraData.position = cameraObject->GetWorldPosition();
+						cameraData.orthographicMatrix = glm::ortho(
+							0.0f, static_cast<float>(width),
+							0.0f, static_cast<float>(height));
 					}
 				}
 

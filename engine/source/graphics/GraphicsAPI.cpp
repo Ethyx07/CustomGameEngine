@@ -146,6 +146,59 @@ namespace eng
         return defaultShaderProgram;
     }
 
+    const std::shared_ptr<ShaderProgram>& GraphicsAPI::GetDefault2DShaderProgram()
+    {
+        if (!default2DShaderProgram) //Ensures we are only creating it before returning it if it is yet to be created
+        {
+            std::string vertexShaderSource = R"(
+            #version 330 core
+            layout (location = 0) in vec2 position;
+            
+            out vec2 vUV;
+            
+            uniform mat4 uModel;
+            uniform mat4 uView;
+            uniform mat4 uProjecection;
+
+            uniform vec2 uPivot;
+            uniform vec2 uSize;
+
+            uniform vec2 uUVMin;
+            uniform vec2 uUVMax;
+
+            void main()
+            {
+                vec2 local = (position - uPivot) * uSize;
+                vUV = mix(uUVMin, uUVMax, position);
+        
+                gl_Position = uProjection * uView * uModel * vec4(local, 0.0, 1.0);
+            }
+            )";
+
+            std::string fragmentShaderSource = R"(
+            #version 330 core
+
+            in vec2 vUV;
+
+            uniform vec4 uColour;
+
+            uniform sampler2D uTex;
+
+            out vec4 FragColour;
+
+            void main()
+            {
+                vec4 source = texture(uTex, vUV) * uColour;
+                FragColour = source;
+            }
+            )";
+
+            default2DShaderProgram = CreateShaderProgram(vertexShaderSource, fragmentShaderSource);
+        }
+
+        return default2DShaderProgram;
+    }
+
     GLuint GraphicsAPI::CreateVertexBuffer(const std::vector<float>& vertices)
     {
         GLuint VBO = 0;
@@ -175,6 +228,18 @@ namespace eng
     {
         glClear(GL_COLOR_BUFFER_BIT);
         glClear(GL_DEPTH_BUFFER_BIT);
+    }
+
+    void GraphicsAPI::SetDepthTestEnabled(bool enabled)
+    {
+        if (enabled)
+        {
+            glEnable(GL_DEPTH_TEST);
+        }
+        else
+        {
+            glDisable(GL_DEPTH_TEST);
+        }
     }
 
     void GraphicsAPI::BindShaderProgram(ShaderProgram* shaderProgram)
