@@ -48,6 +48,7 @@ namespace eng
 
 		//2D rendering
 		graphicsAPI.SetDepthTestEnabled(false);
+		graphicsAPI.SetBlendMode(BlendMode::Alpha);
 		const auto shaderProgram2D = graphicsAPI.GetDefault2DShaderProgram();
 		shaderProgram2D->Bind();
 		mesh2D->Bind();
@@ -67,6 +68,7 @@ namespace eng
 			mesh2D->Draw();
 		}
 		mesh2D->Unbind();
+		graphicsAPI.SetBlendMode(BlendMode::Disabled);
 		graphicsAPI.SetDepthTestEnabled(true);
 	}
 }

@@ -2,12 +2,13 @@
 #include "Common.h"
 #include <vector>
 #include <glm/mat4x4.hpp>
-
+#include <memory>
 
 
 namespace eng
 {
 
+	class Texture;
 	class Mesh;
 	class Material;
 	class GraphicsAPI;

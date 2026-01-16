@@ -275,7 +275,7 @@ namespace eng
 		return glm::vec2(position);
 	}
 
-	void GameObject::SetPostion2D(const glm::vec2& pos)
+	void GameObject::SetPosition2D(const glm::vec2& pos)
 	{
 		position = glm::vec3(pos, 0.0f);
 	}
@@ -287,7 +287,7 @@ namespace eng
 
 	void GameObject::SetRotation2D(float rot)
 	{
-		//rotation = glm::angleAxis(rotation, glm::vec3(0.0f, 0.0f, 1.0f));
+		rotation = glm::angleAxis(rot, glm::vec3(0.0f, 0.0f, 1.0f));
 	}
 
 	glm::vec2 GameObject::GetScale2D() const

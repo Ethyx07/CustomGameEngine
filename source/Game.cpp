@@ -17,8 +17,28 @@ void Game::RegisterTypes()
 
 bool Game::Init()
 {
-	scene = eng::Scene::Load("scenes/level01.sc");
+	/*scene = eng::Scene::Load("scenes/level01.sc");
+	eng::Engine::GetInstance().SetScene(scene.get());*/
+	scene = std::make_shared<eng::Scene>();
 	eng::Engine::GetInstance().SetScene(scene.get());
+
+	auto sprite = scene->CreateObject("Sprite");
+	auto spriteComponent = new eng::SpriteComponent();
+
+	auto texture = eng::Texture::Load("textures/duck.png");
+	spriteComponent->SetTexture(texture);
+
+	sprite->AddComponent(spriteComponent);
+	sprite->SetPosition2D(glm::vec2(500, 500));
+	spriteComponent->SetSize(glm::vec2(64, 64));
+	spriteComponent->SetUpperRightUV(glm::vec2(1.0f, 1.0f));
+	sprite->SetRotation2D(glm::radians(90.0f));
+	sprite->SetScale2D(glm::vec2(5.0f));
+
+	auto camera = scene->CreateObject("Camera");
+	auto cameraComponent = new eng::CameraComponent();
+	camera->AddComponent(cameraComponent);
+	scene->SetMainCamera(camera);
 
 
     return true;

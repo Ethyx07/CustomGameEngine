@@ -10,6 +10,14 @@ namespace eng
 	class Material;
 	class Mesh;
 
+	enum class BlendMode
+	{
+		Disabled,
+		Alpha,
+		Additive,
+		Multiply
+	};
+
 	class GraphicsAPI
 	{
 	public:
@@ -27,6 +35,7 @@ namespace eng
 		void ClearBuffers();
 
 		void SetDepthTestEnabled(bool enabled);
+		void SetBlendMode(BlendMode mode);
 
 		void BindMesh(Mesh* mesh);
 		void UnbindMesh(Mesh* mesh);

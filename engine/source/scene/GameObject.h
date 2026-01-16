@@ -92,7 +92,7 @@ namespace eng
 
 		glm::vec2 GetWorldPosition2D() const;
 		glm::vec2 GetPosition2D() const;
-		void SetPostion2D(const glm::vec2& pos);
+		void SetPosition2D(const glm::vec2& pos);
 
 		float GetRotation2D() const;
 		void SetRotation2D(float rot);

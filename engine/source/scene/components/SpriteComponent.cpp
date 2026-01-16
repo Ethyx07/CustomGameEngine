@@ -1,5 +1,6 @@
 #include "scene/components/SpriteComponent.h"
 #include "graphics/Texture.h"
+#include "Engine.h"
 
 
 namespace eng
@@ -68,6 +69,18 @@ namespace eng
 		{
 			return;
 		}
+
+		RenderCommand2D command;
+		command.modelMatrix = GetOwner()->GetWorldTransform2D();
+		command.texture = texture.get();
+		command.colour = colour;
+		command.size = size;
+		command.pivot = pivot;
+		command.lowerLeftUV = lowerLeftUV;
+		command.upperRightUV = upperRightUV;
+
+		auto& renderQueue = Engine::GetInstance().GetRenderQueue();
+		renderQueue.Submit(command);
 	}
 
 	void SpriteComponent::SetTexture(const std::shared_ptr<Texture>& newTexture)

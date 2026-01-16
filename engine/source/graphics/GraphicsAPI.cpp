@@ -158,7 +158,7 @@ namespace eng
             
             uniform mat4 uModel;
             uniform mat4 uView;
-            uniform mat4 uProjecection;
+            uniform mat4 uProjection;
 
             uniform vec2 uPivot;
             uniform vec2 uSize;
@@ -239,6 +239,41 @@ namespace eng
         else
         {
             glDisable(GL_DEPTH_TEST);
+        }
+    }
+
+    void GraphicsAPI::SetBlendMode(BlendMode mode)
+    {
+        switch (mode)
+        {
+        case BlendMode::Disabled: 
+        {
+            glDisable(GL_BLEND);
+        }
+            break;
+        case BlendMode::Alpha:
+        {
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        }
+            break;
+        case BlendMode::Additive:
+        {
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_ONE, GL_ONE);
+        }
+            break;
+        case BlendMode::Multiply:
+        {
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_DST_COLOR, GL_ZERO);
+        }
+            break;
+        default:
+        {
+            glDisable(GL_BLEND);
+        }
+            break;
         }
     }
 
