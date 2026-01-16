@@ -330,6 +330,11 @@ namespace eng
 		}
 	}
 
+	const std::vector<std::unique_ptr<GameObject>>& GameObject::GetChildren() const
+	{
+		return children;
+	}
+
 	void ParseGLTFNode(cgltf_node* node, GameObject* parent, const std::filesystem::path& folder)
 	{
 		auto object = parent->GetScene()->CreateObject(node->name, parent);

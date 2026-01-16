@@ -103,6 +103,7 @@ namespace eng
 		glm::mat4 GetLocalTransform2D() const;
 		glm::mat4 GetWorldTransform2D() const;
 
+		const std::vector<std::unique_ptr<GameObject>>& GetChildren() const;
 
 		static GameObject* LoadGLTF(const std::string& path, Scene* gameScene);
 

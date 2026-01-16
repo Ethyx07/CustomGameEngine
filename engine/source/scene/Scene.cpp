@@ -8,6 +8,9 @@
 #include "scene/components/AudioComponent.h"
 #include "scene/components/AudioListenerComponent.h"
 #include "scene/components/SpriteComponent.h"
+#include "scene/components/ui/CanvasComponent.h"
+#include "scene/components/ui/UIElementComponent.h"
+#include "scene/components/ui/TextComponent.h"
 #include "Engine.h"
 
 
@@ -24,6 +27,9 @@ namespace eng
 		AudioComponent::Register();
 		AudioListenerComponent::Register();
 		SpriteComponent::Register();
+		CanvasComponent::Register();
+		UIElementComponent::Register();
+		TextComponent::Register();
 	}
 
 	void Scene::Update(float deltaTime)
