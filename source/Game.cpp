@@ -39,6 +39,19 @@ bool Game::Init()
 	camera->AddComponent(cameraComponent);
 	scene->SetMainCamera(camera);
 
+	auto canvas = scene->CreateObject("Canvas");
+	auto canvasComp = new eng::CanvasComponent();
+	canvas->AddComponent(canvasComp);
+
+	auto text = scene->CreateObject("Text", canvas);
+	text->SetPosition2D(glm::vec2(300.0f, 300.0f));
+
+	auto textComp = new eng::TextComponent();
+	text->AddComponent(textComp);
+	textComp->SetText("Test Text 12!");
+	textComp->SetFont("fonts/flashback_records.ttf", 24);
+	textComp->SetColour(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+
 
     return true;
 }

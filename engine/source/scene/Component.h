@@ -15,7 +15,7 @@ namespace eng
 		virtual ~Component() = default;
 		virtual void LoadProperties(const nlohmann::json& json);
 		virtual void Init();
-		virtual void Update(float deltaTime) = 0;
+		virtual void Update(float deltaTime);
 		virtual size_t GetTypeId() const = 0;
 		
 		GameObject* GetOwner();

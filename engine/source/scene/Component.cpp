@@ -12,6 +12,11 @@ namespace eng
 	{
 	}
 
+	void Component::Update(float deltaTime)
+	{
+
+	}
+
 	GameObject* Component::GetOwner()
 	{
 		return owner;

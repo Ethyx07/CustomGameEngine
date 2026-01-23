@@ -11,6 +11,20 @@ namespace eng
         return true;
     }
 
+    void GraphicsAPI::SetViewport(int x, int y, int width, int height)
+    {
+        glViewport(x, y, width, height);
+        viewport.x = x;
+        viewport.y = y;
+        viewport.width = width;
+        viewport.height = height;
+    }
+
+    const Rect& GraphicsAPI::GetViewport() const
+    {
+        return viewport;
+    }
+
 	std::shared_ptr<ShaderProgram> GraphicsAPI::CreateShaderProgram(const std::string& vertexSource,
 		const std::string& fragmentSource)
 	{
@@ -197,6 +211,55 @@ namespace eng
         }
 
         return default2DShaderProgram;
+    }
+
+    const std::shared_ptr<ShaderProgram>& GraphicsAPI::GetDefaultUIShaderProgram()
+    {
+        if (!defaultUIShaderProgram)
+        {
+            std::string vertexShaderSource = R"(
+            #version 330 core
+            layout (location = 0) in vec2 position;
+            layout (location = 1) in vec4 colour;
+            layout (location = 2) in vec2 uv;
+
+            out vec2 vUV;
+            out vec4 vColour;
+
+            uniform mat4 uProjection;
+
+            void main()
+            {
+                vUV = uv;
+                vColour = colour;
+    
+                gl_Position = uProjection * vec4(position,0.0, 1.0);
+            }
+            )";
+
+            //src checks if use texture != 0. If true then multiply texture and colour, if false just use colour
+            std::string fragmentShaderSource = R"(
+            #version 330 core
+
+            in vec2 vUV;
+            in vec4 vColour;
+
+            uniform sampler2D uTex;
+            uniform int uUseTexture;
+
+            out vec4 FragColor;
+
+            void main()
+            {
+                vec4 src = (uUseTexture != 0) ? texture(uTex, vUV) * vColour : vColour;
+                FragColor = src;
+            }
+            )";
+
+            defaultUIShaderProgram = CreateShaderProgram(vertexShaderSource, fragmentShaderSource);
+        }
+
+        return defaultUIShaderProgram;
     }
 
     GLuint GraphicsAPI::CreateVertexBuffer(const std::vector<float>& vertices)

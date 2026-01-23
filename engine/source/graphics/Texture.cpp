@@ -50,6 +50,16 @@ namespace eng
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); //Controls how its displayed when zoomed/closer
 	}
 
+	int Texture::GetWidth() const
+	{
+		return width;
+	}
+
+	int Texture::GetHeight() const
+	{
+		return height;
+	}
+
 	std::shared_ptr<Texture> Texture::Load(const std::string& path)
 	{
 		int width, height, numChannels;

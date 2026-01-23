@@ -46,6 +46,11 @@ namespace eng
 		inputManager.SetMousePositionChanged(true);
 	}
 
+	void windowSizeCallback(GLFWwindow* window, int width, int height)
+	{
+		eng::Engine::GetInstance().GetGraphicsAPI().SetViewport(0, 0, width, height);
+	}
+
 	Engine& Engine::GetInstance() //Globally accessible engine
 	{
 		static Engine instance;
@@ -82,6 +87,7 @@ namespace eng
 		glfwSetKeyCallback(window, keyCallback);
 		glfwSetMouseButtonCallback(window, mouseButtonCallback);
 		glfwSetCursorPosCallback(window, cursorPositionCallback); //Sets the callbacks for the mouse input and position for look action
+		glfwSetWindowSizeCallback(window, windowSizeCallback);
 
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); //Disables OS cursor and locks cursor to window
 		glfwMakeContextCurrent(window); //Sets window as glfw current context
@@ -92,9 +98,11 @@ namespace eng
 			return false;
 		}
 		graphicsAPI.Init();
+		graphicsAPI.SetViewport(0, 0, width, height);
 		renderQueue.Init();
 		physicsManager.Init();
 		audioManager.Init();
+		fontManager.Init();
 		return application->Init();
 	}
 
@@ -211,6 +219,11 @@ namespace eng
 	AudioManager& Engine::GetAudioManager()
 	{
 		return audioManager;
+	}
+
+	FontManager& Engine::GetFontManager()
+	{
+		return fontManager;
 	}
 
 	void Engine::SetScene(Scene* scene)

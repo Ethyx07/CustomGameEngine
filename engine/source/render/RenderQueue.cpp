@@ -4,6 +4,8 @@
 #include "graphics/GraphicsAPI.h"
 #include "graphics/ShaderProgram.h"
 
+#include <glm/gtc/matrix_transform.hpp>
+
 namespace eng
 {
 	void RenderQueue::Init()
@@ -19,6 +21,11 @@ namespace eng
 	void RenderQueue::Submit(const RenderCommand2D& command)
 	{
 		commandList2D.push_back(command); //Adds 2d command to list
+	}
+
+	void RenderQueue::Submit(const RenderCommandUI& command)
+	{
+		commandListUI.push_back(command);
 	}
 
 	void RenderQueue::Draw(GraphicsAPI& graphicsAPI, const CameraData& cameraData, const std::vector<LightData> lights)
@@ -70,5 +77,44 @@ namespace eng
 		mesh2D->Unbind();
 		graphicsAPI.SetBlendMode(BlendMode::Disabled);
 		graphicsAPI.SetDepthTestEnabled(true);
+
+		graphicsAPI.SetBlendMode(BlendMode::Alpha);
+		graphicsAPI.SetDepthTestEnabled(false);
+		
+		for (auto& command : commandListUI)
+		{
+			glm::mat4 ortho = glm::ortho(
+				0.0f, static_cast<float>(command.screenWidth), 
+				0.0f, static_cast<float>(command.screenHeight)
+			); //Gets ortho matrix based on screen height and width
+
+			command.shaderProgram->Bind();
+			command.shaderProgram->SetUniform("uProjection", ortho);
+
+			command.mesh->Bind();
+
+			uint32_t indexBase = 0;
+			for (auto& batch : command.batches)
+			{
+				if (batch.texture) //Only batches with textures have a texture applied to them
+				{
+					command.shaderProgram->SetUniform("uUseTexture", 1);
+					command.shaderProgram->SetTexture("uTex", batch.texture);
+				}
+				else
+				{
+					command.shaderProgram->SetUniform("uUseTexture", 0);
+				}
+
+				command.mesh->DrawIndexedRange(indexBase, batch.indexCount); //Draws based on indexBase -> indexBase + index Count
+				indexBase += batch.indexCount; //Increases base by index count
+			}
+
+			command.mesh->Unbind();
+		}
+
+		graphicsAPI.SetBlendMode(BlendMode::Disabled);
+		graphicsAPI.SetDepthTestEnabled(true);
+		commandListUI.clear();
 	}
 }

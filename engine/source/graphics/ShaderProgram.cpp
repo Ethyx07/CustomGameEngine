@@ -38,6 +38,12 @@ namespace eng
 		glUniform1f(location, value);
 	}
 
+	void ShaderProgram::SetUniform(const std::string& name, int value)
+	{
+		auto location = GetUniformLocation(name);
+		glUniform1i(location, value);
+	}
+
 	void ShaderProgram::SetUniform(const std::string& name, float v1, float v2)
 	{
 		auto location = GetUniformLocation(name);
