@@ -44,11 +44,10 @@ bool Game::Init()
 	canvas->AddComponent(canvasComp);
 
 	auto text = scene->CreateObject("Text", canvas);
-	text->SetPosition2D(glm::vec2(300.0f, 300.0f));
-
-	auto textComp = new eng::TextComponent();
+	text->SetPosition2D(glm::vec2(50.0f, 1040.0f));
+	textComp = new eng::TextComponent();
 	text->AddComponent(textComp);
-	textComp->SetText("Test Text 12!");
+	textComp->SetText("");
 	textComp->SetFont("fonts/flashback_records.ttf", 24);
 	textComp->SetColour(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
 
@@ -64,7 +63,9 @@ void Game::Update(float deltaTime)
 	fpsCounter += 1;
 	timeSinceLastSecond += deltaTime; //Basic fps counter that adds the fps each update until its been a second and then prints and resets
 	if (timeSinceLastSecond >= 1.0f) {
-		std::cout << "FPS: " << fpsCounter << std::endl;
+		int fpsValue = fpsCounter;
+		std::string fpsVal = "FPS: " + std::to_string(fpsValue);
+		textComp->SetText(fpsVal);
 		fpsCounter = 0;
 		timeSinceLastSecond = 0;
 	}

@@ -13,10 +13,10 @@ public:
 
 private:
 	std::shared_ptr<eng::Scene> scene = nullptr;
-
+	eng::TextComponent* textComp = nullptr;
 	bool bCameraOne = true;
 	bool bCooldown = false;
-
+	
 	float cooldownTimer = 2.0f;
 	float currentCooldownTimer = 0.0f;
 
