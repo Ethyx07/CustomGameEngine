@@ -28,6 +28,13 @@ namespace eng
 	std::shared_ptr<ShaderProgram> GraphicsAPI::CreateShaderProgram(const std::string& vertexSource,
 		const std::string& fragmentSource)
 	{
+        ShaderKey key{ vertexSource, fragmentSource };
+        auto it = shaderCache.find(key);
+        if (it != shaderCache.end())
+        {
+            return it->second;
+        }
+
         //Creates and compiles vertex shader, checks if if was compiled properly //
         GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
         const char* vertexShaderCStr = vertexSource.c_str();
@@ -77,7 +84,9 @@ namespace eng
         glDeleteShader(vertexShader);
         glDeleteShader(fragmentShader);
 
-        return std::make_shared<ShaderProgram>(shaderProgramID);
+        auto shaderProgram = std::make_shared<ShaderProgram>(shaderProgramID);
+        shaderCache.emplace(key, shaderProgram);
+        return shaderProgram;
 	}
 
     const std::shared_ptr<ShaderProgram>& GraphicsAPI::GetDefaultShaderProgram()

@@ -8,6 +8,13 @@
 
 namespace eng
 {
+
+	void CanvasComponent::LoadProperties(const nlohmann::json& json)
+	{
+		bool active = json.value("active", true);
+		SetActive(active);
+	}
+
 	void CanvasComponent::Init()
 	{
 		VertexLayout layout;
@@ -24,6 +31,11 @@ namespace eng
 
 	void CanvasComponent::Update(float deltaTime)
 	{
+		if (!bIsActive)
+		{
+			return;
+		}
+
 		BeginRendering();
 		const auto& children = owner->GetChildren(); //Gets array of children pointers
 		for (const auto& child : children)
@@ -135,5 +147,15 @@ namespace eng
 				CollectUI(component, outVec);
 			}
 		}
+	}
+
+	void CanvasComponent::SetActive(bool bActive)
+	{
+		bIsActive = bActive;
+	}
+	  
+	bool CanvasComponent::IsActive() const
+	{
+		return bIsActive;
 	}
 }

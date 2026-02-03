@@ -40,6 +40,7 @@ namespace eng
 
         void SetMainCamera(GameObject* camera);
         GameObject* GetMainCamera();
+        GameObject* FindObjectByName(const std::string& name);
 
         std::vector<LightData> CollectLights();
 

@@ -13,6 +13,8 @@ namespace eng
 		int height; //Rasterized height
 
 		int advance; //Horizontal advance(distance to next glyph)
+		int xOffset = 0;
+		int yOffset = 0;
 	};
 
 	class Font 

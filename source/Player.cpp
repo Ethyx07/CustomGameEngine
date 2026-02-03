@@ -53,8 +53,9 @@ void Player::Update(float deltaTime)
 				}
 				audioComponent->Play("shoot");
 			}
+			GameObject* Root3D = scene->FindObjectByName("3DRoot");
 
-			auto bullet = scene->CreateObject<Bullet>("Bullet");
+			auto bullet = scene->CreateObject<Bullet>("Bullet", Root3D);
 			auto material = eng::Material::Load("materials/suzanne.mat");
 			auto mesh = eng::Mesh::CreateSphere(0.2f, 32, 32);
 			bullet->AddComponent(new eng::MeshComponent(material, mesh));

@@ -301,7 +301,33 @@ namespace eng
 			}
 		}
 
+		std::string activeCanvasName = j.value("activeCanvas", "");
+		for (auto& child : result->objects)
+		{
+			if (auto canvasObject = child->FindChildByName(activeCanvasName))
+			{
+				if (auto component = canvasObject->GetComponent<CanvasComponent>())
+				{
+					Engine::GetInstance().GetUIInputSystem().SetCanvas(component);
+					break;
+				}
+			}
+		}
+
 		return result;
+	}
+
+	GameObject* Scene::FindObjectByName(const std::string& name)
+	{
+		for (auto& obj : objects)
+		{
+			if (auto child = obj->FindChildByName(name))
+			{
+				return child;
+			}
+		}
+
+		return nullptr;
 	}
 
 	void Scene::LoadObject(const nlohmann::json& objectJSON, GameObject* parent)

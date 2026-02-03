@@ -133,6 +133,8 @@ namespace eng
 			gd.width = static_cast<int>(bmp.width);
 			gd.height = static_cast<int>(bmp.rows);
 			gd.advance = (face->glyph->advance.x >> 6);
+			gd.xOffset = static_cast<int>(face->glyph->bitmap_left);
+			gd.yOffset = static_cast<int>(face->glyph->bitmap_top);
 
 			//Advance cursor with 1px spacing
 			penX += static_cast<int>(bmp.width) + 1;

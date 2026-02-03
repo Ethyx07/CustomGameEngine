@@ -17,9 +17,59 @@ void Game::RegisterTypes()
 
 bool Game::Init()
 {
-	/*scene = eng::Scene::Load("scenes/level01.sc");
-	eng::Engine::GetInstance().SetScene(scene.get());*/
-	scene = std::make_shared<eng::Scene>();
+	scene = eng::Scene::Load("scenes/scene.sc");
+	auto& engine = eng::Engine::GetInstance();
+	engine.SetScene(scene);
+
+	Root3D = scene->FindObjectByName("3DRoot");
+	if (Root3D)
+	{
+		Root3D->SetActive(false);
+	}
+	auto canvasComponent = engine.GetUIInputSystem().GetCanvas();
+	if (!canvasComponent)
+	{
+		return false;
+	}
+	canvasComponent->SetActive(true);
+	engine.SetCursorEnabled(true);
+	engine.GetUIInputSystem().SetActive(true);
+	
+	if (auto button = canvasComponent->GetOwner()->FindChildByName("PlayButton"))
+	{
+		if (auto component = button->GetComponent<eng::ButtonComponent>())
+		{
+			component->onClick = [this]()
+				{
+					auto& engine = eng::Engine::GetInstance();
+					engine.GetUIInputSystem().GetCanvas()->SetActive(false);
+					engine.SetCursorEnabled(false);
+
+					if (Root3D)
+					{
+						Root3D->SetActive(true);
+					}
+				};
+		}
+	}
+
+	if (auto button = canvasComponent->GetOwner()->FindChildByName("QuitButton"))
+	{
+		if (auto component = button->GetComponent<eng::ButtonComponent>())
+		{
+			component->onClick = [this]()
+				{
+					SetNeedsToClose(true);
+				};
+		}
+	}
+
+
+	eng::Engine::GetInstance().GetGraphicsAPI().SetClearColour(
+		117.0f / 256.0f, 187.0f / 256.0f, 253.0f / 256.0f, 1.0f
+	);
+
+	/*scene = std::make_shared<eng::Scene>();
 	eng::Engine::GetInstance().SetScene(scene.get());
 
 	auto sprite = scene->CreateObject("Sprite");
@@ -61,14 +111,25 @@ bool Game::Init()
 	auto buttonComponent = new eng::ButtonComponent();
 	buttonComponent->SetRect(glm::vec2(150, 50));
 	buttonComponent->SetColour(glm::vec4(0.8f, 0.8f, 0.8f, 1.0f));
-	button->AddComponent(buttonComponent);
+	button->AddComponent(buttonComponent);*/
 
     return true;
 }
 
 void Game::Update(float deltaTime)
 {	
-	scene.get()->Update(deltaTime);
+	scene->Update(deltaTime);
+
+	if (eng::Engine::GetInstance().GetInputManager().isKeyPressed(GLFW_KEY_ESCAPE))
+	{
+		if (Root3D && Root3D->IsActive())
+		{
+			auto& engine = eng::Engine::GetInstance();
+			engine.GetUIInputSystem().GetCanvas()->SetActive(true);
+			engine.SetCursorEnabled(true);
+			Root3D->SetActive(false);
+		}
+	}
 
 	time += deltaTime;
 	fpsCounter += 1;
@@ -76,7 +137,10 @@ void Game::Update(float deltaTime)
 	if (timeSinceLastSecond >= 1.0f) {
 		int fpsValue = fpsCounter;
 		std::string fpsVal = "FPS: " + std::to_string(fpsValue);
-		textComp->SetText(fpsVal);
+		if (textComp)
+		{
+			textComp->SetText(fpsVal);
+		}
 		fpsCounter = 0;
 		timeSinceLastSecond = 0;
 	}

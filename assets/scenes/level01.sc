@@ -64,6 +64,7 @@
 				}
 			]
 		},
+		{},
 		{
 			"name": "Ground",
 			"position": {

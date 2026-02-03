@@ -30,7 +30,7 @@ namespace eng
 
 	void UIInputSystem::Update(float deltaTime)
 	{
-		if (!bActive || !activeCanvas)
+		if (!bActive || !activeCanvas || !activeCanvas->IsActive())
 		{
 			return;
 		}

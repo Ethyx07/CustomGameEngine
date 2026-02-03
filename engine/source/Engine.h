@@ -46,8 +46,8 @@ namespace eng
 		FontManager& GetFontManager();
 		UIInputSystem& GetUIInputSystem();
 
-		void SetScene(Scene* scene);
-		Scene* GetScene();
+		void SetScene(const std::shared_ptr<Scene>& scene);
+		const std::shared_ptr<Scene>& GetScene();
 
 		void SetCursorEnabled(bool enabled);
 
@@ -65,7 +65,7 @@ namespace eng
 		FontManager fontManager;
 		UIInputSystem uiInputSystem;
 
-		std::unique_ptr<Scene> currentScene;
+		std::shared_ptr<Scene> currentScene;
 		
 	};
 }

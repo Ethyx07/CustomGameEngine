@@ -16,6 +16,7 @@ private:
 	eng::TextComponent* textComp = nullptr;
 	bool bCameraOne = true;
 	bool bCooldown = false;
+	eng::GameObject* Root3D = nullptr;
 	
 	float cooldownTimer = 2.0f;
 	float currentCooldownTimer = 0.0f;

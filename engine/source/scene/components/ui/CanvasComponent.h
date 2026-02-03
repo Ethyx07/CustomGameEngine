@@ -19,6 +19,7 @@ namespace eng
 		COMPONENT(CanvasComponent)
 
 	public:
+		void LoadProperties(const nlohmann::json& json) override;
 		void Init() override;
 		void Update(float deltaTime) override;
 		void UpdateBatches(Texture* texture);
@@ -33,10 +34,14 @@ namespace eng
 
 		void DrawRect(const glm::vec2& p1, const glm::vec2& p2, const glm::vec4& colour);
 
+		void SetActive(bool bActive);
+		bool IsActive() const;
+
 	private:
 		std::vector<UIBatch> batches;
 		std::vector<float> vertices; //pos(2), colour(4), uv(2)
 		std::vector<uint32_t> indices;
 		std::shared_ptr<Mesh> mesh;
+		bool bIsActive = true;
 	};
 }

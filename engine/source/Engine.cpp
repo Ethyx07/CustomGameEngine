@@ -169,6 +169,8 @@ namespace eng
 			inputManager.SetOldMousePosition(inputManager.GetCurrentMousePosition());
 			inputManager.ClearStates(); //Resets value to false each frame
 		}
+
+		application.reset(nullptr);
 	}
 
 	void Engine::Destroy()
@@ -238,14 +240,14 @@ namespace eng
 		return uiInputSystem;
 	}
 
-	void Engine::SetScene(Scene* scene)
+	void Engine::SetScene(const std::shared_ptr<Scene>& scene)
 	{
-		currentScene.reset(scene);
+		currentScene = scene;
 	}
 
-	Scene* Engine::GetScene()
+	const std::shared_ptr<Scene>& Engine::GetScene()
 	{
-		return currentScene.get();
+		return currentScene;
 	}
 
 	void Engine::SetCursorEnabled(bool enabled)
