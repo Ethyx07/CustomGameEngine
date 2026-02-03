@@ -43,6 +43,10 @@ bool Game::Init()
 	auto canvasComp = new eng::CanvasComponent();
 	canvas->AddComponent(canvasComp);
 
+	auto& uiInput = eng::Engine::GetInstance().GetUIInputSystem();
+	uiInput.SetActive(true);
+	uiInput.SetCanvas(canvasComp);
+
 	auto text = scene->CreateObject("Text", canvas);
 	text->SetPosition2D(glm::vec2(50.0f, 1040.0f));
 	textComp = new eng::TextComponent();
@@ -51,6 +55,13 @@ bool Game::Init()
 	textComp->SetFont("fonts/flashback_records.ttf", 24);
 	textComp->SetColour(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
 
+	auto button = scene->CreateObject("Button", canvas);
+	button->SetPosition2D(glm::vec2(150, 50));
+
+	auto buttonComponent = new eng::ButtonComponent();
+	buttonComponent->SetRect(glm::vec2(150, 50));
+	buttonComponent->SetColour(glm::vec4(0.8f, 0.8f, 0.8f, 1.0f));
+	button->AddComponent(buttonComponent);
 
     return true;
 }

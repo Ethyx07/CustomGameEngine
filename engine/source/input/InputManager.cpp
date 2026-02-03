@@ -69,4 +69,53 @@ namespace eng
 	{
 		return bMousePositionChanged;
 	}
+
+	void InputManager::SetMouseButtonWasPressed(int button, bool pressed)
+	{
+		if (button < 0 || button >= static_cast<int>(mouseKeyPressed.size()))
+		{
+			return;
+		}
+		mouseKeyPressed[button] = pressed;
+	}
+
+	bool InputManager::WasMouseButtonPressed(int button) const
+	{
+		if (button < 0 || button >= static_cast<int>(mouseKeyPressed.size()))
+		{
+			return false;
+		}
+		return mouseKeyPressed[button];
+	}
+
+	void InputManager::SetMouseButtonWasReleased(int button, bool released)
+	{
+		if (button < 0 || button >= static_cast<int>(mouseKeyReleased.size()))
+		{
+			return;
+		}
+		mouseKeyReleased[button] = released;
+	}
+
+	bool InputManager::WasMouseButtonReleased(int button) const
+	{
+		if (button < 0 || button >= static_cast<int>(mouseKeyReleased.size()))
+		{
+			return false;
+		}
+		return mouseKeyReleased[button];
+	}
+
+	void InputManager::ClearStates()
+	{
+		SetMousePositionChanged(false);
+		for (auto& key : mouseKeyPressed)
+		{
+			SetMouseButtonWasPressed(key, false);
+		}
+		for (auto& key : mouseKeyReleased)
+		{
+			SetMouseButtonWasReleased(key, false);
+		}
+	}
 }

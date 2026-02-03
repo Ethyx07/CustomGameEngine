@@ -31,6 +31,8 @@ namespace eng
 			const glm::vec2& uv1, const glm::vec2& uv2,
 			Texture* texture, const glm::vec4& colour);
 
+		void DrawRect(const glm::vec2& p1, const glm::vec2& p2, const glm::vec4& colour);
+
 	private:
 		std::vector<UIBatch> batches;
 		std::vector<float> vertices; //pos(2), colour(4), uv(2)

@@ -29,10 +29,12 @@ namespace eng
 		if (action == GLFW_PRESS) //Checks if button is pressed. Game can then use this in return
 		{
 			inputManager.SetMouseButtonPressed(button, true);
+			inputManager.SetMouseButtonWasPressed(button, true);
 		}
 		else if (action == GLFW_RELEASE)
 		{
 			inputManager.SetMouseButtonPressed(button, false);
+			inputManager.SetMouseButtonWasReleased(button, true);
 		}
 	}
 
@@ -89,7 +91,6 @@ namespace eng
 		glfwSetCursorPosCallback(window, cursorPositionCallback); //Sets the callbacks for the mouse input and position for look action
 		glfwSetWindowSizeCallback(window, windowSizeCallback);
 
-		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); //Disables OS cursor and locks cursor to window
 		glfwMakeContextCurrent(window); //Sets window as glfw current context
 
 		if (glewInit() != GLEW_OK)  //Checks if glew was initialised properly
@@ -123,6 +124,12 @@ namespace eng
 			lastTimePoint = now; //Updates last time point to be the current one
 
 			physicsManager.Update(deltaTime); //Updates physics within the engine loop
+
+			if (uiInputSystem.IsActive()) //Only updates uiInputSystem if its active
+			{
+				uiInputSystem.Update(deltaTime);
+			}
+
 			application->Update(deltaTime); //Calls update function for the application
 
 			graphicsAPI.SetClearColour(1.0f, 1.0f, 1.0f, 1.0f);
@@ -160,7 +167,7 @@ namespace eng
 			glfwSwapBuffers(window);
 
 			inputManager.SetOldMousePosition(inputManager.GetCurrentMousePosition());
-			inputManager.SetMousePositionChanged(false); //Resets value to false each frame
+			inputManager.ClearStates(); //Resets value to false each frame
 		}
 	}
 
@@ -226,6 +233,11 @@ namespace eng
 		return fontManager;
 	}
 
+	UIInputSystem& Engine::GetUIInputSystem()
+	{
+		return uiInputSystem;
+	}
+
 	void Engine::SetScene(Scene* scene)
 	{
 		currentScene.reset(scene);
@@ -234,6 +246,11 @@ namespace eng
 	Scene* Engine::GetScene()
 	{
 		return currentScene.get();
+	}
+
+	void Engine::SetCursorEnabled(bool enabled)
+	{
+		glfwSetInputMode(window, GLFW_CURSOR, enabled ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
 	}
 
 	

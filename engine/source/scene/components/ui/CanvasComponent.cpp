@@ -75,6 +75,21 @@ namespace eng
 		UpdateBatches(texture);
 	}
 
+	void CanvasComponent::DrawRect(const glm::vec2& p1, const glm::vec2& p2, const glm::vec4& colour)
+	{
+		uint32_t base = static_cast<uint32_t>(vertices.size() / 8);
+
+		vertices.insert(vertices.end(), {
+			p2.x, p2.y, colour.r, colour.g, colour.b, colour.a, 1.0f, 1.0f,
+			p1.x, p2.y, colour.r, colour.g, colour.b, colour.a, 0.0f, 1.0f,
+			p1.x, p1.y, colour.r, colour.g, colour.b, colour.a, 0.0f, 0.0f,
+			p2.x, p1.y, colour.r, colour.g, colour.b, colour.a, 1.0f, 0.0f
+			});
+		indices.insert(indices.end(), { base, base + 1, base + 2, base, base + 2, base + 3 });
+
+		UpdateBatches(nullptr);
+	}
+
 	void CanvasComponent::UpdateBatches(Texture* texture)
 	{
 		if (batches.empty() || batches.back().texture != texture)
@@ -110,6 +125,15 @@ namespace eng
 
 	void CanvasComponent::CollectUI(UIElementComponent* element, std::vector<UIElementComponent*>& outVec)
 	{
+		outVec.push_back(element);
 
+		const auto& children = element->GetOwner()->GetChildren();
+		for (const auto& child : children)
+		{
+			if (auto component = child->GetComponent<UIElementComponent>())
+			{
+				CollectUI(component, outVec);
+			}
+		}
 	}
 }
