@@ -12,6 +12,7 @@
 #include "scene/components/ui/UIElementComponent.h"
 #include "scene/components/ui/TextComponent.h"
 #include "scene/components/ui/ButtonComponent.h"
+#include "scene/components/ui/RectTransformComponent.h"
 #include "Engine.h"
 
 
@@ -32,6 +33,7 @@ namespace eng
 		UIElementComponent::Register();
 		TextComponent::Register();
 		ButtonComponent::Register();
+		RectTransformComponent::Register();
 	}
 
 	void Scene::Update(float deltaTime)
